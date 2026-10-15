@@ -3,12 +3,13 @@ export type Season = 'Primavera' | 'Verão' | 'Outono' | 'Inverno';
 export type GameStage = 
   | 'welcome'              // Tela inicial
   | 'map_overview'         // Mapa do Vale livre para explorar
-  | 'narrative_card'       // Apresentação da carta narrativa da estação
+  | 'bridge_inspection'    // Cena interativa de aproximação da Ponte (toque na rachadura, diálogo e tarefas)
+  | 'narrative_card'       // Apresentação da carta narrativa viva
   | 'prediction'           // Momento de pausa e reflexão prévia
   | 'seed_allocation'      // Distribuição das sementes (Agora / Proteção / Depois)
   | 'confirmation'         // Resumo gentil antes de avançar
-  | 'season_transition'    // Passagem da estação e ocorrência do imprevisto
-  | 'consequence'          // Explicação clara e sem julgamento do que ocorreu
+  | 'season_transition'    // Passagem da estação com a tempestade interativa
+  | 'consequence'          // Explicação clara e sem julgamento com mudanças no mundo
   | 'journal'              // Diário de Bordo para registrar reflexões
   | 'transfer_challenge'   // Situação 2 para transferir e fixar o raciocínio
   | 'stage_completed';     // Encerramento da rodada com aprendizado
@@ -45,4 +46,5 @@ export interface AccessibilitySettings {
   soundEnabled: boolean;
   musicEnabled: boolean;
   autoNarrate: boolean;
+  reducedMotion: boolean;
 }

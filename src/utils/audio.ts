@@ -95,6 +95,87 @@ class MagicSoundManager {
     this.playMagicSparkle();
   }
 
+  // Som suave de madeira rangendo ao inspecionar a ponte
+  public playWoodCreak() {
+    if (this.isMuted) return;
+    this.initCtx();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.linearRampToValueAtTime(110, now + 0.15);
+    osc.frequency.linearRampToValueAtTime(80, now + 0.3);
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(450, now);
+
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.06, now + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.35);
+  }
+
+  // Som de água suave do rio correndo
+  public playWaterSplash() {
+    if (this.isMuted) return;
+    this.initCtx();
+    if (!this.ctx) return;
+
+    const notes = [440, 554, 659];
+    const now = this.ctx.currentTime;
+    notes.forEach((f, i) => {
+      this.playBellNote(f * 1.5, now + i * 0.05, 0.25, 0.05);
+    });
+  }
+
+  // Som distante e seguro de trovão/vento
+  public playSoftThunder() {
+    if (this.isMuted) return;
+    this.initCtx();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(75, now);
+    osc.frequency.linearRampToValueAtTime(55, now + 0.8);
+    osc.frequency.exponentialRampToValueAtTime(40, now + 1.8);
+
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.09, now + 0.3);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 1.8);
+  }
+
+  // Toque de ferramenta consertando algo
+  public playHammer() {
+    if (this.isMuted) return;
+    this.initCtx();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    this.playBellNote(380, now, 0.15, 0.12);
+    this.playBellNote(440, now + 0.1, 0.18, 0.1);
+  }
+
   // Som suave de virar página com pó mágico
   public playPageFlip() {
     if (this.isMuted) return;

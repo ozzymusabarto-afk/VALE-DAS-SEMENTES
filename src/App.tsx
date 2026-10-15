@@ -4,11 +4,12 @@ import type { GameStage, SeedAllocation, AccessibilitySettings, Season } from '.
 import { Header } from './components/Header';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { ValleyMap } from './components/ValleyMap';
+import { BridgeInspectionScene } from './components/BridgeInspectionScene';
+import { StormInteractiveScene } from './components/StormInteractiveScene';
 import { NarrativeCardModal } from './components/NarrativeCardModal';
 import { PredictionStage } from './components/PredictionStage';
 import { SeedAllocationStage } from './components/SeedAllocationStage';
 import { ConfirmationStage } from './components/ConfirmationStage';
-import { SeasonTransitionStage } from './components/SeasonTransitionStage';
 import { ConsequenceStage } from './components/ConsequenceStage';
 import { JournalModal } from './components/JournalModal';
 import { TransferChallengeStage } from './components/TransferChallengeStage';
@@ -31,7 +32,8 @@ export function App() {
     highContrast: false,
     soundEnabled: true,
     musicEnabled: false,
-    autoNarrate: false
+    autoNarrate: false,
+    reducedMotion: false
   });
 
   const remainingFreeSeeds = totalSeeds - (allocation.now + allocation.protection + allocation.future);
@@ -40,13 +42,17 @@ export function App() {
   const getCurrentNarrationText = (): string => {
     switch (stage) {
       case 'map_overview':
-        return `Você está no mapa do Vale das Sementes. Aqui você pode explorar a Casa, o Campo, o Mercado, o Silo da Reserva e a Praça Comunitária. Clique em Abrir História da Rodada para começar!`;
+        return `Você está no mapa do Vale das Sementes. Aqui você pode explorar a Casa, o Campo, o Mercado, o Silo da Reserva e a Praça Comunitária. Clique em Cuidar do Vale para começar a aventura!`;
+      case 'bridge_inspection':
+        return `Investigação no Vale! Dona Clara mostra o desafio da ponte antes da chuva. Toque na rachadura na madeira, proteja os suprimentos e converse com os moradores antes de decidir.`;
       case 'narrative_card':
         return `A Ponte de Madeira e a Festa das Flores. Olá, ${guardianName}! A primavera chegou ao Vale. A ponte precisa de reforço e teremos a festa na praça. Você tem 12 sementes para cuidar desta estação.`;
       case 'prediction':
         return `Hora da previsão! O que você acha que pode acontecer antes de distribuir as sementes? Pense com carinho: reservar sementes no Silo ajuda a ter opções se chover forte.`;
       case 'seed_allocation':
         return `Distribua suas 12 sementes entre Agora para a casa e festa, Proteção no Silo para imprevistos, e Depois para o conserto da ponte.`;
+      case 'season_transition':
+        return `A ventania da virada de estação começou! Toque para fechar as janelas da casa e proteger os suprimentos antes da chuva aumentar.`;
       case 'consequence':
         return `Compreendendo o resultado: O vento soprou e soltou algumas telhas. Você não podia controlar o vento, mas sua preparação fez toda a diferença.`;
       default:
@@ -91,8 +97,16 @@ export function App() {
 
         {stage === 'map_overview' && (
           <ValleyMap
-            onStartRound={() => setStage('narrative_card')}
+            onStartRound={() => setStage('bridge_inspection')}
             activeRoundTitle="Capítulo 1: A Ponte de Madeira e a Festa das Flores"
+          />
+        )}
+
+        {stage === 'bridge_inspection' && (
+          <BridgeInspectionScene
+            guardianName={guardianName}
+            onProceedToDecision={() => setStage('prediction')}
+            onBackToMap={() => setStage('map_overview')}
           />
         )}
 
@@ -111,7 +125,7 @@ export function App() {
               setPredictionText(customText);
               setStage('seed_allocation');
             }}
-            onBack={() => setStage('narrative_card')}
+            onBack={() => setStage('bridge_inspection')}
           />
         )}
 
@@ -136,7 +150,7 @@ export function App() {
         )}
 
         {stage === 'season_transition' && (
-          <SeasonTransitionStage
+          <StormInteractiveScene
             onContinue={() => setStage('consequence')}
           />
         )}

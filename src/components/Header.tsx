@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Volume2, VolumeX, Sparkles, Eye, Mic } from 'lucide-react';
+import { BookOpen, Volume2, VolumeX, Sparkles, Eye, Mic, Wind } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 import { speechHelper } from '../utils/speech';
 import type { AccessibilitySettings } from '../types/game';
@@ -72,6 +72,18 @@ export const Header: React.FC<HeaderProps> = ({
         document.body.classList.remove('large-text');
       }
       return { ...prev, largeText: next };
+    });
+  };
+
+  const toggleReducedMotion = () => {
+    setAccessibility(prev => {
+      const next = !prev.reducedMotion;
+      if (next) {
+        document.body.classList.add('reduced-motion');
+      } else {
+        document.body.classList.remove('reduced-motion');
+      }
+      return { ...prev, reducedMotion: next };
     });
   };
 
@@ -150,6 +162,16 @@ export const Header: React.FC<HeaderProps> = ({
           aria-label="Alto contraste"
         >
           <Eye size={18} aria-hidden="true" />
+        </button>
+
+        <button 
+          onClick={toggleReducedMotion}
+          className={`btn-icon ${accessibility.reducedMotion ? 'active' : ''}`}
+          title="Reduzir movimentos e brilhos na tela"
+          aria-label="Reduzir movimentos e brilhos"
+        >
+          <Wind size={18} aria-hidden="true" />
+          <span>{accessibility.reducedMotion ? 'Movimento: Calmo' : 'Movimento'}</span>
         </button>
       </nav>
     </header>
