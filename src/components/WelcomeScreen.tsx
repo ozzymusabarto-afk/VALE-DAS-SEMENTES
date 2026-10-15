@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sprout, Compass, Heart, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Compass, Heart, ShieldCheck, ArrowRight } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
 interface WelcomeScreenProps {
@@ -16,19 +16,49 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
   };
 
   return (
-    <div className="paper-card" style={{ maxWidth: '780px', margin: '20px auto', textAlign: 'center' }}>
+    <div className="paper-card" style={{ maxWidth: '820px', margin: '20px auto', textAlign: 'center' }}>
       <div style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '72px',
-        height: '72px',
-        borderRadius: '50%',
-        background: 'var(--color-nature-light)',
-        color: 'var(--color-nature-green)',
-        marginBottom: '16px'
+        position: 'relative',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        boxShadow: '0 8px 24px rgba(60, 45, 30, 0.15)',
+        marginBottom: '24px',
+        border: '3px solid #dfd5c2'
       }}>
-        <Sprout size={40} />
+        <img 
+          src="/concept_vale_das_sementes.jpg" 
+          alt="Paisagem viva do Vale das Sementes: o vilarejo, o mercado da raposa, a horta com o Professor Cornélio, o Silo da Reserva e a ponte sobre o rio" 
+          style={{
+            width: '100%',
+            maxHeight: '380px',
+            objectFit: 'cover',
+            display: 'block'
+          }}
+        />
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          background: 'linear-gradient(to top, rgba(30, 20, 10, 0.75), transparent)',
+          padding: '24px 20px 12px',
+          color: 'white',
+          textAlign: 'left'
+        }}>
+          <span style={{ 
+            background: 'rgba(255, 255, 255, 0.25)', 
+            backdropFilter: 'blur(4px)', 
+            padding: '3px 10px', 
+            borderRadius: '999px', 
+            fontSize: '0.8rem', 
+            fontWeight: 700 
+          }}>
+            Arte Conceitual Oficial do Vale
+          </span>
+          <p style={{ margin: '6px 0 0', fontSize: '0.95rem', opacity: 0.95, textShadow: '0 1px 3px rgba(0,0,0,0.6)' }}>
+            O Professor Cornélio, a Raposa do Mercado e os moradores cuidam juntos da terra, da ponte e da vida cotidiana.
+          </p>
+        </div>
       </div>
 
       <h1 style={{ color: 'var(--color-nature-green)', margin: '0 0 10px', fontSize: '2.2rem' }}>
