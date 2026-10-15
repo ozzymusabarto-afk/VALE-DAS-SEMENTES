@@ -12,10 +12,17 @@ interface SparkleParticle {
   life: number;
 }
 
-export const MagicGlitterCursor: React.FC = () => {
+interface MagicSparklesProps {
+  onlyWelcome?: boolean;
+}
+
+export const MagicGlitterCursor: React.FC<MagicSparklesProps> = ({ onlyWelcome = false }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
+    // Se não for a tela inicial e estiver restrito, não ativa
+    if (!onlyWelcome) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -33,27 +40,27 @@ export const MagicGlitterCursor: React.FC = () => {
     window.addEventListener('resize', handleResize);
 
     const particles: SparkleParticle[] = [];
-    const colors = ['#ffd700', '#fff3a8', '#ffeb3b', '#80e27e', '#81d4fa', '#ffffff'];
+    const colors = ['#ffd700', '#fff3a8', '#fef08a', '#ffffff'];
 
-    // Adiciona uma faísca mágica estrelada
-    const addSparkle = (x: number, y: number, count = 2) => {
+    // Adiciona uma faísca mágica estrelada em cliques ou eventos
+    const addSparkle = (x: number, y: number, count = 3) => {
       for (let i = 0; i < count; i++) {
         particles.push({
-          x: x + (Math.random() - 0.5) * 16,
-          y: y + (Math.random() - 0.5) * 16,
-          size: Math.random() * 8 + 6,
+          x: x + (Math.random() - 0.5) * 20,
+          y: y + (Math.random() - 0.5) * 20,
+          size: Math.random() * 8 + 5,
           opacity: 1,
           color: colors[Math.floor(Math.random() * colors.length)],
           rotation: Math.random() * Math.PI,
-          speedX: (Math.random() - 0.5) * 1.5,
-          speedY: (Math.random() - 0.5) * 1.5 - 0.8, // Sobe de leve
-          life: 0.95
+          speedX: (Math.random() - 0.5) * 1.8,
+          speedY: (Math.random() - 0.5) * 1.8 - 0.5,
+          life: 0.92
         });
       }
     };
 
-    // Rastro do mouse / toque da criança
-    const handlePointerMove = (e: MouseEvent | TouchEvent) => {
+    // Apenas ao clicar/tocar em botões na tela inicial, solta um brilhinho de celebração momentâneo
+    const handleClick = (e: MouseEvent | TouchEvent) => {
       let clientX = 0;
       let clientY = 0;
 
@@ -65,13 +72,11 @@ export const MagicGlitterCursor: React.FC = () => {
         clientY = (e as MouseEvent).clientY;
       }
 
-      addSparkle(clientX, clientY, 2);
+      addSparkle(clientX, clientY, 6);
     };
 
-    window.addEventListener('mousemove', handlePointerMove, { passive: true });
-    window.addEventListener('touchmove', handlePointerMove, { passive: true });
+    window.addEventListener('click', handleClick);
 
-    // Desenha estrela de 4 pontas mágica (✨)
     const drawFourPointStar = (x: number, y: number, radius: number, rot: number) => {
       ctx.save();
       ctx.translate(x, y);
@@ -89,13 +94,12 @@ export const MagicGlitterCursor: React.FC = () => {
       ctx.restore();
     };
 
-    // Loop de renderização
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Esporadicamente gerar estrelinhas cintilantes aleatórias na tela para o ambiente parecer mágico
-      if (Math.random() < 0.1) {
-        addSparkle(Math.random() * width, Math.random() * height, 1);
+      // Leve cintilação esporádica e sutil na tela inicial (sem seguir o mouse)
+      if (Math.random() < 0.04) {
+        addSparkle(Math.random() * width, Math.random() * (height * 0.4), 1);
       }
 
       for (let i = particles.length - 1; i >= 0; i--) {
@@ -126,11 +130,12 @@ export const MagicGlitterCursor: React.FC = () => {
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handlePointerMove);
-      window.removeEventListener('touchmove', handlePointerMove);
+      window.removeEventListener('click', handleClick);
       cancelAnimationFrame(animationId);
     };
-  }, []);
+  }, [onlyWelcome]);
+
+  if (!onlyWelcome) return null;
 
   return (
     <canvas

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import type { GameStage, SeedAllocation, AccessibilitySettings } from './types/game';
+import type { GameStage, SeedAllocation, AccessibilitySettings, Season } from './types/game';
 import { Header } from './components/Header';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { ValleyMap } from './components/ValleyMap';
@@ -19,6 +19,7 @@ import { MagicGlitterCursor } from './components/MagicGlitterCursor';
 export function App() {
   const [guardianName, setGuardianName] = useState('Guardião do Vale');
   const [stage, setStage] = useState<GameStage>('welcome');
+  const [currentSeason, setCurrentSeason] = useState<Season>('Primavera');
   const [totalSeeds] = useState(12);
   const [allocation, setAllocation] = useState<SeedAllocation>({ now: 4, protection: 4, future: 4 });
   const [predictionCards, setPredictionCards] = useState<string[]>(['silo_care']);
@@ -62,19 +63,20 @@ export function App() {
     setAllocation({ now: 4, protection: 4, future: 4 });
     setPredictionCards(['silo_care']);
     setPredictionText('');
+    setCurrentSeason('Primavera');
     setStage('map_overview');
   };
 
   return (
     <div className="app-container">
-      <AmbientParticles />
-      <MagicGlitterCursor />
+      <AmbientParticles season={currentSeason} />
+      <MagicGlitterCursor onlyWelcome={stage === 'welcome'} />
       {stage !== 'welcome' && (
         <Header
           currentSeeds={Math.max(0, remainingFreeSeeds)}
           totalSeeds={totalSeeds}
-          seasonText="Primavera • Ano 1"
-          goalText="A Ponte e a Casa"
+          seasonText={`${currentSeason} • Ano 1`}
+          goalText={currentSeason === 'Primavera' ? "A Ponte e a Casa" : "A Horta e a Cisterna"}
           onOpenJournal={() => setIsJournalOpen(true)}
           accessibility={accessibility}
           setAccessibility={setAccessibility}
@@ -176,6 +178,7 @@ export function App() {
         isPostRound={stage === 'consequence'}
         onProceedToTransfer={() => {
           setIsJournalOpen(false);
+          setCurrentSeason('Verão');
           setStage('transfer_challenge');
         }}
       />
