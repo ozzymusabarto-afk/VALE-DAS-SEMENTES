@@ -877,118 +877,131 @@
 .scene-stage-canvas {
   position: relative;
   width: 100%;
-  height: 340px;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.25), 0 0 0 4px #faf5eb;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.2), 0 4px 16px rgba(60, 45, 25, 0.1);
   background: #2b1d16;
+  border: 3px solid #ded3be;
 }
 
-.scene-background-zoom {
+.scene-full-artwork {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.8s ease;
 }
 
-/* Alvo da Rachadura na Ponte */
-.crack-interactive-target {
+/* Hotspots Modernos e Elegantes da Ponte */
+.bridge-hotspot {
   position: absolute;
-  top: 60%;
-  left: 65%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.95);
-  border: 2.5px solid #d97706;
+  background: rgba(255, 255, 255, 0.94);
+  border: 2px solid #b45309;
   border-radius: 999px;
-  padding: 8px 16px;
+  padding: 6px 14px 6px 8px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.45);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
   transition: all 0.25s ease;
-  z-index: 20;
+  z-index: 25;
 }
 
-.crack-interactive-target:hover {
-  transform: translate(-50%, -50%) scale(1.08);
-  border-color: #b45309;
+.bridge-hotspot:hover {
+  transform: translate(-50%, -50%) scale(1.07);
+  background: #ffffff;
+  border-color: #d97706;
 }
 
-.crack-interactive-target.discovered {
-  border-color: #16a34a;
+.bridge-hotspot.checked {
   background: #f0fdf4;
+  border-color: #16a34a;
   box-shadow: 0 4px 16px rgba(22, 163, 74, 0.35);
 }
 
-.crack-pulse-icon {
-  width: 34px;
-  height: 34px;
+.hotspot-pulse-circle {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #fef3c7;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: pingPulse 2s infinite ease-out;
+  flex-shrink: 0;
 }
 
-.crack-label {
-  font-size: 0.92rem;
+.bridge-hotspot.checked .hotspot-pulse-circle {
+  background: #dcfce7;
+}
+
+.hotspot-pill-tag {
+  font-size: 0.88rem;
   font-weight: 800;
-  color: #78350f;
+  color: #292524;
+  white-space: nowrap;
 }
 
-/* Alvo dos Mantimentos */
-.supplies-target {
-  position: absolute;
-  top: 75%;
-  left: 32%;
-  background: rgba(255, 253, 245, 0.92);
-  border: 2px solid #8d6e63;
+.bridge-hotspot.checked .hotspot-pill-tag {
+  color: #166534;
+}
+
+/* Painel de Pistas e Descobertas: Visíveis lado a lado */
+.investigation-checklist-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+}
+
+.clue-box {
+  background: #ffffff;
+  border: 2px solid #e7dfd5;
   border-radius: 14px;
-  padding: 6px 14px;
+  padding: 14px;
+  transition: all 0.25s ease;
+}
+
+.clue-box.found {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.clue-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-  z-index: 15;
-  transition: all 0.2s;
+  margin-bottom: 6px;
+  color: #292524;
 }
 
-.supplies-target:hover {
-  transform: scale(1.06);
-}
-
-.supplies-target.protected {
-  border-color: #2e7d32;
-  background: #e8f5e9;
-}
-
-.supplies-label {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #3e2723;
-}
-
-.crack-discovery-bubble {
-  position: absolute;
-  bottom: 14px;
-  left: 20px;
-  right: 20px;
-  background: rgba(255, 251, 235, 0.96);
-  border: 2px solid #f59e0b;
-  border-radius: 14px;
-  padding: 12px 18px;
+.clue-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #e7dfd5;
+  color: #57534e;
+  font-size: 0.8rem;
+  font-weight: 800;
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 0.95rem;
-  color: #92400e;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  animation: fadeIn 0.3s ease-out;
-  z-index: 30;
+  justify-content: center;
+}
+
+.clue-box.found .clue-num {
+  background: #22c55e;
+  color: white;
+}
+
+.clue-desc {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: #57534e;
+  margin: 0;
+}
+
+.clue-box.found .clue-desc {
+  color: #166534;
+  font-weight: 500;
 }
 
 /* Seção de Diálogo com Personagem */
@@ -1029,55 +1042,91 @@
 }
 
 .character-speech-text {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   line-height: 1.6;
   color: #2d3748;
   margin: 0 0 16px;
 }
 
-.interactive-questions-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 14px;
+/* TODAS as respostas de Dona Clara visíveis em cards simultâneos */
+.dialogue-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
 }
 
-.btn-dialog-question {
+.dialogue-card-item {
   background: #ffffff;
-  border: 2px solid #d4c4b0;
-  border-radius: 999px;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #4a3b32;
+  border: 2px solid #e2d8cb;
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialogue-card-item:hover {
+  transform: translateY(-2px);
+  border-color: #bbf7d0;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.dialogue-card-item.highlighted {
+  border-color: #22c55e;
+  background: #f0fdf4;
+  box-shadow: 0 6px 18px rgba(34, 197, 94, 0.18);
+}
+
+.dialogue-card-top {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.dialogue-card-q {
+  font-size: 0.95rem;
+  color: #1e293b;
+  flex: 1;
+  line-height: 1.35;
+}
+
+.btn-icon-subtle {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
   cursor: pointer;
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 
-.btn-dialog-question:hover {
-  background: #f0fdf4;
-  border-color: #22c55e;
-  transform: translateY(-1px);
+.btn-icon-subtle:hover {
+  background: #e2e8f0;
+  color: #1e293b;
 }
 
-.btn-dialog-question.active {
-  background: #2e7d32;
-  color: white;
-  border-color: #2e7d32;
+.dialogue-card-summary {
+  font-size: 0.85rem;
+  color: #15803d;
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: #dcfce7;
+  padding: 4px 8px;
+  border-radius: 6px;
 }
 
-.character-answer-box {
-  background: #f0fdf4;
-  border-left: 4px solid #16a34a;
-  border-radius: 10px;
-  padding: 14px 18px;
-  font-size: 1rem;
-  color: #14532d;
-  line-height: 1.55;
-  animation: fadeIn 0.25s ease-out;
+.dialogue-card-full {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #475569;
+  margin: 0;
 }
 
 .scene-bottom-action {

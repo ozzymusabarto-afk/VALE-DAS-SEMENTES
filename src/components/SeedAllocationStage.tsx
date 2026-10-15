@@ -107,6 +107,10 @@ export const SeedAllocationStage: React.FC<SeedAllocationStageProps> = ({
       <div className="allocation-baskets">
         {/* Cesto Agora */}
         <div className="basket-card now">
+          <div style={{ borderRadius: '12px', overflow: 'hidden', height: '80px', marginBottom: '10px', background: '#fff3e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '2.5rem' }}>🏡🥖</span>
+          </div>
+
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#e65100', fontWeight: 800 }}>
               <Sun size={22} />
@@ -151,6 +155,14 @@ export const SeedAllocationStage: React.FC<SeedAllocationStageProps> = ({
 
         {/* Cesto Proteção (O Silo) */}
         <div className="basket-card protection">
+          <div style={{ borderRadius: '12px', overflow: 'hidden', height: '80px', marginBottom: '10px', border: '1.5px solid #bbf7d0' }}>
+            <img 
+              src="/cena-silo-reserva.webp" 
+              alt="O Silo da Reserva" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
+
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#2e7d32', fontWeight: 800 }}>
               <Shield size={22} />
@@ -195,6 +207,14 @@ export const SeedAllocationStage: React.FC<SeedAllocationStageProps> = ({
 
         {/* Cesto Depois (Metas) */}
         <div className="basket-card future">
+          <div style={{ borderRadius: '12px', overflow: 'hidden', height: '80px', marginBottom: '10px', border: '1.5px solid #bfdbfe' }}>
+            <img 
+              src="/cena-ponte-primavera.webp" 
+              alt="A Ponte Comunitária" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
+
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#1565c0', fontWeight: 800 }}>
               <Flag size={22} />
