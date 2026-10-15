@@ -13,6 +13,7 @@ import { ConsequenceStage } from './components/ConsequenceStage';
 import { JournalModal } from './components/JournalModal';
 import { TransferChallengeStage } from './components/TransferChallengeStage';
 import { StageCompletedScreen } from './components/StageCompletedScreen';
+import { AmbientParticles } from './components/AmbientParticles';
 
 export function App() {
   const [guardianName, setGuardianName] = useState('Guardião do Vale');
@@ -65,6 +66,7 @@ export function App() {
 
   return (
     <div className="app-container">
+      <AmbientParticles />
       {stage !== 'welcome' && (
         <Header
           currentSeeds={Math.max(0, remainingFreeSeeds)}

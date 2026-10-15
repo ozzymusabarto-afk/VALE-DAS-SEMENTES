@@ -1,6 +1,5 @@
-import React from 'react';
-import { Home, Sprout, ShoppingBag, ShieldAlert, Wrench, Users, Trees, ArrowRight, Info } from 'lucide-react';
-import type { ValleyLocation } from '../types/game';
+import React, { useState } from 'react';
+import { Home, Sprout, ShoppingBag, ShieldAlert, Wrench, Trees, ArrowRight, X, Sparkles } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
 interface ValleyMapProps {
@@ -8,163 +7,229 @@ interface ValleyMapProps {
   activeRoundTitle: string;
 }
 
-const locations: ValleyLocation[] = [
-  {
-    id: 'house',
-    name: 'A Casa',
-    title: 'Necessidades & Cotidiano',
-    roleDescription: 'Onde cuidamos da alimentação, manutenção e do bem-estar diário.',
-    iconName: 'home'
-  },
-  {
-    id: 'field',
-    name: 'O Campo & Fazenda',
-    title: 'Trabalho & Produção',
-    roleDescription: 'Onde plantamos sementes, dedicamos esforço e esperamos o tempo de colheita.',
-    iconName: 'sprout'
-  },
+interface Hotspot {
+  id: string;
+  name: string;
+  character: string;
+  role: string;
+  x: number; // Porcentagem horizontal
+  y: number; // Porcentagem vertical
+  icon: React.ReactNode;
+  color: string;
+  description: string;
+  lesson: string;
+}
+
+const HOTSPOTS: Hotspot[] = [
   {
     id: 'market',
-    name: 'O Mercado',
-    title: 'Consumo & Escolhas',
-    roleDescription: 'Onde comparamos preços, distinguimos necessidades de impulsos e negociamos.',
-    iconName: 'market'
+    name: 'O Mercado da Raposa',
+    character: 'Raposa Comerciante',
+    role: 'Consumo Consciente & Comparação',
+    x: 8,
+    y: 52,
+    icon: <ShoppingBag size={20} />,
+    color: '#e65100',
+    description: 'A Raposa sempre tem novidades e frutas frescas. Aqui aprendemos a diferença entre o que realmente precisamos agora e o que é só um desejo de momento.',
+    lesson: 'Comprar com calma e perguntar: "Eu preciso disso hoje ou posso esperar?"'
+  },
+  {
+    id: 'workshop',
+    name: 'A Oficina de Ferramentas',
+    character: 'Mestre Tomás, o Marceneiro',
+    role: 'Habilidades & Manutenção',
+    x: 23,
+    y: 53,
+    icon: <Wrench size={20} />,
+    color: '#5d4037',
+    description: 'Aqui Tomás conserta arados, enxadas e mesas. Mostra que consertar algo antes que quebre de vez economiza muitas sementes no futuro.',
+    lesson: 'Trabalho, aprendizado e cuidado com ferramentas geram valor duradouro.'
+  },
+  {
+    id: 'house',
+    name: 'A Casa da Fazenda',
+    character: 'A Criança Guardiã e sua Família',
+    role: 'Necessidades & Bem-Estar',
+    x: 48,
+    y: 47,
+    icon: <Home size={20} />,
+    color: '#c62828',
+    description: 'O coração da propriedade. É onde cuidamos do alimento diário, do descanso e do conforto da rotina.',
+    lesson: 'Parte dos nossos recursos é usada para viver bem hoje, não apenas para guardar.'
   },
   {
     id: 'silo',
-    name: 'O Silo',
-    title: 'Proteção & Reserva',
-    roleDescription: 'Onde guardamos sementes para imprevistos e emergências que não podemos prever.',
-    iconName: 'silo'
+    name: 'O Silo da Reserva',
+    character: 'A Torre Protetora do Vale',
+    role: 'Segurança contra Imprevistos',
+    x: 63,
+    y: 38,
+    icon: <ShieldAlert size={20} />,
+    color: '#6a1b9a',
+    description: 'Construído em pedras fortes com o símbolo da semente. Guarda reservas para tempestades, geadas e emergências.',
+    lesson: 'Quem tem reserva não é melhor que ninguém, mas tem mais tempo e opções para escolher com calma.'
   },
   {
-    id: 'square',
-    name: 'A Praça da Comunidade',
-    title: 'Cooperação & Ajuda',
-    roleDescription: 'Onde os vizinhos cooperam, dividem ferramentas e se apoiam mutuamente.',
-    iconName: 'square'
+    id: 'field',
+    name: 'A Horta do Professor Cornélio',
+    character: 'Professor Cornélio',
+    role: 'Trabalho, Paciência & Colheita',
+    x: 58,
+    y: 70,
+    icon: <Sprout size={20} />,
+    color: '#2e7d32',
+    description: 'O sábio Cornélio ensina a semear, regar e respeitar o tempo das plantas crescerem sem pressa.',
+    lesson: 'Plantar hoje pede esforço e paciência; o fruto vem na estação certa.'
+  },
+  {
+    id: 'bridge',
+    name: 'A Ponte do Vilarejo',
+    character: 'Moradores em Cooperação',
+    role: 'Metas Comunitárias & Conexão',
+    x: 84,
+    y: 65,
+    icon: <Sparkles size={20} />,
+    color: '#00838f',
+    description: 'A ponte de pedra que liga o Vale ao outro lado do rio. Precisa de reforço antes das grandes chuvas.',
+    lesson: 'Projetos comunitários beneficiam a todos e pedem colaboração de sementes.'
   },
   {
     id: 'woods',
-    name: 'O Bosque',
-    title: 'Metas & Futuro',
-    roleDescription: 'Onde cuidamos de objetivos que levam mais tempo para florescer.',
-    iconName: 'woods',
-    badge: 'Longo Prazo'
+    name: 'O Bosque & As Montanhas',
+    character: 'A Natureza do Vale',
+    role: 'Metas de Longo Prazo',
+    x: 80,
+    y: 20,
+    icon: <Trees size={20} />,
+    color: '#1b5e20',
+    description: 'Onde as árvores centenárias crescem devagar ao longo dos anos.',
+    lesson: 'Sonhos grandes exigem prazos longos e constância.'
   }
 ];
 
 export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundTitle }) => {
-  const [selectedLoc, setSelectedLoc] = React.useState<ValleyLocation | null>(null);
+  const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null);
 
-  const getIcon = (id: string) => {
-    switch (id) {
-      case 'house': return <Home size={24} />;
-      case 'field': return <Sprout size={24} />;
-      case 'market': return <ShoppingBag size={24} />;
-      case 'silo': return <ShieldAlert size={24} />;
-      case 'square': return <Users size={24} />;
-      case 'woods': return <Trees size={24} />;
-      default: return <Wrench size={24} />;
-    }
-  };
-
-  const handleSelectLocation = (loc: ValleyLocation) => {
-    soundManager.playPageFlip();
-    setSelectedLoc(loc);
+  const handleOpenSpot = (spot: Hotspot) => {
+    soundManager.playChime();
+    setActiveHotspot(spot);
   };
 
   return (
-    <div className="valley-map-container" role="region" aria-label="Mapa do Vale das Sementes">
-      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-        <h2 style={{ margin: '0 0 6px', color: 'var(--color-nature-green)' }}>
-          Bem-vindo ao Mapa do Vale
-        </h2>
-        <p style={{ margin: 0, color: 'var(--text-muted)' }}>
-          Explore as áreas do Vale ou abra a história da estação para começar suas escolhas.
-        </p>
-      </div>
-
-      <div style={{
-        background: 'linear-gradient(135deg, #e8f5e9 0%, #fff8e1 100%)',
-        border: '3px solid #c8e6c9',
-        borderRadius: '20px',
-        padding: '20px',
-        marginBottom: '20px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '16px'
-      }}>
-        <div>
-          <span style={{ 
-            background: '#ffb74d', 
-            color: '#5d4037', 
-            fontWeight: 800, 
-            fontSize: '0.8rem', 
-            padding: '3px 10px', 
-            borderRadius: '999px',
-            textTransform: 'uppercase'
-          }}>
-            Desafio da Estação
-          </span>
-          <h3 style={{ margin: '8px 0 4px', fontSize: '1.35rem' }}>{activeRoundTitle}</h3>
-          <p style={{ margin: 0, color: '#4a5568' }}>
-            Dona Clara trouxe uma nova situação para você cuidar junto com o Vale.
+    <div className="interactive-map-wrapper">
+      {/* Faixa Superior de Missão do Vale */}
+      <div className="map-mission-banner">
+        <div className="mission-info">
+          <span className="mission-pill">Missão da Estação</span>
+          <h2 className="mission-title">{activeRoundTitle}</h2>
+          <p className="mission-subtitle">
+            Dona Clara e o Professor Cornélio precisam da sua sabedoria para organizar as 12 sementes desta primavera.
           </p>
         </div>
+
         <button 
           onClick={() => {
             soundManager.playChime();
             onStartRound();
           }}
-          className="btn-primary"
+          className="btn-mission-play"
           aria-label="Abrir Carta da Estação"
         >
           <span>Abrir História da Rodada</span>
-          <ArrowRight size={20} />
+          <ArrowRight size={22} />
         </button>
       </div>
 
-      <div className="valley-map-grid">
-        {locations.map((loc) => (
-          <button
-            key={loc.id}
-            onClick={() => handleSelectLocation(loc)}
-            className={`location-card ${loc.id}`}
-            style={{
-              cursor: 'pointer',
-              borderWidth: selectedLoc?.id === loc.id ? '3px' : '2px',
-              borderColor: selectedLoc?.id === loc.id ? 'var(--color-nature-green)' : '#dfd5c2'
-            }}
-            aria-label={`Ver informações sobre ${loc.name}`}
-          >
-            {loc.badge && <span className="location-badge">{loc.badge}</span>}
-            <div className="loc-header">
-              <div className="loc-icon-bubble">
-                {getIcon(loc.id)}
+      {/* O Cenário Pintado Interativo */}
+      <div className="map-canvas-container">
+        <img 
+          src="/concept_vale_das_sementes.jpg" 
+          alt="Mapa Interativo do Vale das Sementes" 
+          className="map-landscape-image"
+        />
+
+        {/* Hotspots posicionados diretamente sobre os locais da pintura */}
+        {HOTSPOTS.map((spot) => {
+          const isSelected = activeHotspot?.id === spot.id;
+          return (
+            <div
+              key={spot.id}
+              className={`map-hotspot-pin ${isSelected ? 'active' : ''}`}
+              style={{
+                left: `${spot.x}%`,
+                top: `${spot.y}%`
+              }}
+            >
+              <button
+                onClick={() => handleOpenSpot(spot)}
+                className="hotspot-bubble-btn"
+                style={{ backgroundColor: spot.color }}
+                title={`Explorar ${spot.name}`}
+                aria-label={`Explorar ${spot.name}`}
+              >
+                {spot.icon}
+                <span className="hotspot-ping-wave" style={{ borderColor: spot.color }}></span>
+              </button>
+
+              <span className="hotspot-tag-label">{spot.name}</span>
+            </div>
+          );
+        })}
+
+        {/* Modal/Balão Informativo do Local Selecionado */}
+        {activeHotspot && (
+          <div className="hotspot-dialog-overlay" onClick={() => setActiveHotspot(null)}>
+            <div 
+              className="hotspot-dialog-card" 
+              onClick={(e) => e.stopPropagation()}
+              style={{ borderTop: `6px solid ${activeHotspot.color}` }}
+            >
+              <div className="dialog-header">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div className="dialog-icon-circle" style={{ background: activeHotspot.color }}>
+                    {activeHotspot.icon}
+                  </div>
+                  <div>
+                    <h3 className="dialog-title">{activeHotspot.name}</h3>
+                    <span className="dialog-character">Quem vive aqui: {activeHotspot.character}</span>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => setActiveHotspot(null)} 
+                  className="dialog-close-btn"
+                  aria-label="Fechar"
+                >
+                  <X size={18} />
+                </button>
               </div>
-              <div>
-                <strong style={{ display: 'block', fontSize: '1.1rem' }}>{loc.name}</strong>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{loc.title}</span>
+
+              <p className="dialog-desc">{activeHotspot.description}</p>
+
+              <div className="dialog-lesson-box">
+                <strong>💡 O que aprendemos aqui:</strong> {activeHotspot.lesson}
+              </div>
+
+              <div className="dialog-actions">
+                <button 
+                  onClick={() => {
+                    setActiveHotspot(null);
+                    onStartRound();
+                  }}
+                  className="btn-dialog-proceed"
+                >
+                  <span>Cuidar do Vale nesta Rodada</span>
+                  <ArrowRight size={18} />
+                </button>
               </div>
             </div>
-            <p style={{ margin: '6px 0 0', fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: '1.4' }}>
-              {loc.roleDescription}
-            </p>
-          </button>
-        ))}
+          </div>
+        )}
       </div>
 
-      {selectedLoc && (
-        <div className="callout-gentle" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '16px' }}>
-          <Info size={24} color="var(--color-nature-green)" style={{ flexShrink: 0 }} />
-          <div>
-            <strong>O que {selectedLoc.name} ensina:</strong> {selectedLoc.roleDescription} No Vale, cuidar de cada área no momento certo traz tranquilidade, sem necessidade de pressa ou competição.
-          </div>
-        </div>
-      )}
+      <div className="map-footer-hint">
+        <span>🌾 <strong>Dica de Guardião:</strong> Toque ou passe o mouse nos símbolos brilhantes da pintura para conhecer cada morador e seus ensinamentos!</span>
+      </div>
     </div>
   );
 };
