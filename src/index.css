@@ -1,0 +1,67 @@
+:root {
+  --bg-parchment: #faf6ee;
+  --bg-card: #ffffff;
+  --text-main: #2d3748;
+  --text-muted: #4a5568;
+  --color-seed: #935116;
+  --color-seed-light: #f5eedc;
+  --color-nature-green: #388e3c;
+  --color-nature-light: #e8f5e9;
+  --color-sky-blue: #1976d2;
+  --color-sky-light: #e3f2fd;
+  --color-warm-amber: #e65100;
+  --color-warm-light: #fff3e0;
+  --border-organic: 16px;
+  --font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Quicksand', 'Nunito', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-parchment);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  background-image: radial-gradient(#ece3d0 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Modo Alto Contraste para acessibilidade */
+body.high-contrast {
+  --bg-parchment: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --color-seed-light: #334155;
+  --color-nature-light: #1e3a1e;
+  --color-sky-light: #1e293b;
+  --color-warm-light: #3e2723;
+  background-image: none;
+}
+
+/* Modo Texto Grande para alfabetização e baixa visão */
+body.large-text {
+  font-size: 1.25rem;
+}
+body.large-text h1 { font-size: 2.2rem; }
+body.large-text h2 { font-size: 1.8rem; }
+body.large-text h3 { font-size: 1.5rem; }
+body.large-text button { font-size: 1.2rem; padding: 14px 24px; }
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
+
+button:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
