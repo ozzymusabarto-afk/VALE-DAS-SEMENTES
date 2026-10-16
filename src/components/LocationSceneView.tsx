@@ -4,6 +4,14 @@ import type { LocationId } from '../types/game';
 import { soundManager } from '../utils/audio';
 import { speechHelper } from '../utils/speech';
 
+import imgMarket from '../assets/cena-mercado-raposa.webp';
+import imgWorkshop from '../assets/cena-oficina-ferramentas.webp';
+import imgHouse from '../assets/cena-casa-fazenda.webp';
+import imgSilo from '../assets/cena-silo-reserva.webp';
+import imgField from '../assets/cena-horta-cornelio.webp';
+import imgBridge from '../assets/cena-ponte-primavera.webp';
+import imgWoods from '../assets/cena-bosque-montanhas.webp';
+
 interface LocationSceneViewProps {
   locationId: LocationId;
   guardianName: string;
@@ -53,7 +61,7 @@ const LOCATION_SCENES: Record<LocationId, LocationSceneData> = {
     characterName: 'Raposa Comerciante',
     characterRole: 'Guardiã da Comparação de Preços',
     characterAvatar: '🦊',
-    imageSrc: '/cena-mercado-raposa.webp',
+    imageSrc: imgMarket,
     imageAlt: 'O Mercado colorido da Raposa no Vale das Sementes com bancas de frutas e pães',
     introSpeech: 'Olá, Guardião! Tudo nesta banca parece delicioso e urgente. Mas uma semente bem pensada compra o que realmente alimenta nossa família. Compare as cestas antes de decidir!',
     hotspots: [
@@ -123,7 +131,7 @@ const LOCATION_SCENES: Record<LocationId, LocationSceneData> = {
     characterName: 'Mestre Tomás, o Marceneiro',
     characterRole: 'Artesão e Mestre em Reparos',
     characterAvatar: '🐻',
-    imageSrc: '/cena-oficina-ferramentas.webp',
+    imageSrc: imgWorkshop,
     imageAlt: 'Oficina de madeira ensolarada com ferramentas rústicas e bancada de trabalho',
     introSpeech: 'Bem-vindo à oficina! Quem cuida da ferramenta hoje, não precisa parar o trabalho amanhã. Consertar antes de quebrar de vez é a forma mais sábia de poupar sementes!',
     hotspots: [
@@ -193,7 +201,7 @@ const LOCATION_SCENES: Record<LocationId, LocationSceneData> = {
     characterName: 'A Família Guardiã',
     characterRole: 'Coração da Vida Cotidiana no Vale',
     characterAvatar: '🏠',
-    imageSrc: '/cena-casa-fazenda.webp',
+    imageSrc: imgHouse,
     imageAlt: 'Interior simples e acolhedor de uma casa de fazenda com mesa de madeira e pão fresco',
     introSpeech: 'A casa é o nosso refúgio. Usar parte das sementes no presente para viver com saúde, afeto e dignidade não é desperdício: é a própria razão pela qual nós trabalhamos!',
     hotspots: [
@@ -263,7 +271,7 @@ const LOCATION_SCENES: Record<LocationId, LocationSceneData> = {
     characterName: 'O Guardião do Silo',
     characterRole: 'Protetor das Sementes Comunitárias',
     characterAvatar: '🛡️',
-    imageSrc: '/cena-silo-reserva.webp',
+    imageSrc: imgSilo,
     imageAlt: 'Torre de pedra do Silo com portas abertas e sacos de sementes organizados',
     introSpeech: 'O Silo não serve para nos tornar mais ricos que os vizinhos. Ele serve para comprar tempo e liberdade de escolha quando o clima do mundo mudar!',
     hotspots: [
@@ -333,7 +341,7 @@ const LOCATION_SCENES: Record<LocationId, LocationSceneData> = {
     characterName: 'Professor Cornélio',
     characterRole: 'Mestre da Terra e da Paciência',
     characterAvatar: '🦉',
-    imageSrc: '/cena-horta-cornelio.webp',
+    imageSrc: imgField,
     imageAlt: 'Horta viçosa com canteiros floridos e hortaliças viçosas sob a luz da primavera',
     introSpeech: 'Na horta, não adianta puxar a folha para ela crescer mais rápido. Cada semente tem seu tempo, e a dedicação diária é o maior segredo da verdadeira colheita!',
     hotspots: [
@@ -403,7 +411,7 @@ const LOCATION_SCENES: Record<LocationId, LocationSceneData> = {
     characterName: 'Dona Clara, a Guardiã Anciã',
     characterRole: 'Guardiã da Conexão e do Futuro',
     characterAvatar: '🦉',
-    imageSrc: '/cena-ponte-primavera.webp',
+    imageSrc: imgBridge,
     imageAlt: 'Ponte de pedra e madeira sobre o rio com flores da primavera e montanhas ao fundo',
     introSpeech: 'Olá, Guardião! A ponte ainda aguenta nossos passos, mas as chuvas da virada de estação costumam ser imprevisíveis. Cuidar dela agora garante que o mercado continue acessível para todos!',
     hotspots: [
@@ -473,7 +481,7 @@ const LOCATION_SCENES: Record<LocationId, LocationSceneData> = {
     characterName: 'A Guia dos Caminhos',
     characterRole: 'Exploradora das Trilhas e Montanhas',
     characterAvatar: '🦅',
-    imageSrc: '/cena-bosque-montanhas.webp',
+    imageSrc: imgWoods,
     imageAlt: 'Trilha suave serpenteando por um bosque de pinheiros antigos em direção às montanhas azuis',
     introSpeech: 'O bosque nos ensina a olhar longe. Uma semente plantada para o longo prazo precisa de raízes fundas e constância, mesmo quando ninguém está olhando!',
     hotspots: [

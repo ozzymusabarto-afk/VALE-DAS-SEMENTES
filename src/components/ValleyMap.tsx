@@ -3,6 +3,14 @@ import { Home, Sprout, ShoppingBag, ShieldAlert, Wrench, Trees, ArrowRight, X, S
 import type { LocationId } from '../types/game';
 import { soundManager } from '../utils/audio';
 
+import imgMarket from '../assets/cena-mercado-raposa.webp';
+import imgWorkshop from '../assets/cena-oficina-ferramentas.webp';
+import imgHouse from '../assets/cena-casa-fazenda.webp';
+import imgSilo from '../assets/cena-silo-reserva.webp';
+import imgField from '../assets/cena-horta-cornelio.webp';
+import imgBridge from '../assets/cena-ponte-primavera.webp';
+import imgWoods from '../assets/cena-bosque-montanhas.webp';
+
 interface ValleyMapProps {
   onStartRound: (locationId?: LocationId) => void;
   activeRoundTitle: string;
@@ -37,7 +45,7 @@ const HOTSPOTS: Hotspot[] = [
     y: 52,
     icon: <ShoppingBag size={20} />,
     color: '#e65100',
-    image: '/cena-mercado-raposa.webp',
+    image: imgMarket,
     actionVerb: 'Comparar',
     tagline: 'Distinga o que precisa agora do impulso.',
     description: 'A Raposa sempre tem novidades e frutas frescas. Aqui aprendemos a diferença entre o que realmente precisamos agora e o que é só um desejo de momento.',
@@ -53,7 +61,7 @@ const HOTSPOTS: Hotspot[] = [
     y: 53,
     icon: <Wrench size={20} />,
     color: '#5d4037',
-    image: '/cena-oficina-ferramentas.webp',
+    image: imgWorkshop,
     actionVerb: 'Consertar',
     tagline: 'Consertar a tempo economiza sementes no futuro.',
     description: 'Aqui Tomás conserta arados, enxadas e mesas. Mostra que consertar algo antes que quebre de vez economiza muitas sementes no futuro.',
@@ -69,7 +77,7 @@ const HOTSPOTS: Hotspot[] = [
     y: 47,
     icon: <Home size={20} />,
     color: '#c62828',
-    image: '/cena-casa-fazenda.webp',
+    image: imgHouse,
     actionVerb: 'Acolher',
     tagline: 'Viver bem hoje traz paz à família.',
     description: 'O coração da propriedade. É onde cuidamos do alimento diário, do descanso e do conforto da rotina.',
@@ -85,7 +93,7 @@ const HOTSPOTS: Hotspot[] = [
     y: 38,
     icon: <ShieldAlert size={20} />,
     color: '#6a1b9a',
-    image: '/cena-silo-reserva.webp',
+    image: imgSilo,
     actionVerb: 'Proteger',
     tagline: 'Uma reserva traz calma em dias difíceis.',
     description: 'Construído em pedras fortes com o símbolo da semente. Guarda reservas para tempestades, geadas e emergências.',
@@ -101,7 +109,7 @@ const HOTSPOTS: Hotspot[] = [
     y: 70,
     icon: <Sprout size={20} />,
     color: '#2e7d32',
-    image: '/cena-horta-cornelio.webp',
+    image: imgField,
     actionVerb: 'Cultivar',
     tagline: 'Paciência e dedicação diária geram boa colheita.',
     description: 'O sábio Cornélio ensina a semear, regar e respeitar o tempo das plantas crescerem sem pressa.',
@@ -117,7 +125,7 @@ const HOTSPOTS: Hotspot[] = [
     y: 65,
     icon: <Sparkles size={20} />,
     color: '#00838f',
-    image: '/cena-ponte-primavera.webp',
+    image: imgBridge,
     actionVerb: 'Investigar',
     tagline: 'Cuidar da ponte mantém a comunidade unida.',
     description: 'A ponte de pedra que liga o Vale ao outro lado do rio. Precisa de reforço antes das grandes chuvas.',
@@ -133,7 +141,7 @@ const HOTSPOTS: Hotspot[] = [
     y: 20,
     icon: <Trees size={20} />,
     color: '#1b5e20',
-    image: '/cena-bosque-montanhas.webp',
+    image: imgWoods,
     actionVerb: 'Explorar',
     tagline: 'Sonhos de longo prazo pedem constância diária.',
     description: 'Onde as árvores centenárias crescem devagar ao longo dos anos, ensinando a ter visão de futuro.',
