@@ -1,9 +1,19 @@
 export type Season = 'Primavera' | 'Verão' | 'Outono' | 'Inverno';
 
+export type LocationId =
+  | 'market'
+  | 'workshop'
+  | 'house'
+  | 'silo'
+  | 'field'
+  | 'bridge'
+  | 'woods';
+
 export type GameStage = 
   | 'welcome'              // Tela inicial
   | 'map_overview'         // Mapa do Vale livre para explorar
-  | 'bridge_inspection'    // Cena interativa de aproximação da Ponte (toque na rachadura, diálogo e tarefas)
+  | 'location_scene'       // Cena interativa do local escolhido (Ponte, Mercado, Oficina, etc.)
+  | 'bridge_inspection'    // Compatibilidade direta para a cena da Ponte
   | 'narrative_card'       // Apresentação da carta narrativa viva
   | 'prediction'           // Momento de pausa e reflexão prévia
   | 'seed_allocation'      // Distribuição das sementes (Agora / Proteção / Depois)

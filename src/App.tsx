@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import './App.css';
-import type { GameStage, SeedAllocation, AccessibilitySettings, Season } from './types/game';
+import type { GameStage, SeedAllocation, AccessibilitySettings, Season, LocationId } from './types/game';
 import { Header } from './components/Header';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { ValleyMap } from './components/ValleyMap';
-import { BridgeInspectionScene } from './components/BridgeInspectionScene';
+import { LocationSceneView } from './components/LocationSceneView';
 import { StormInteractiveScene } from './components/StormInteractiveScene';
 import { NarrativeCardModal } from './components/NarrativeCardModal';
 import { PredictionStage } from './components/PredictionStage';
@@ -20,6 +20,7 @@ import { MagicGlitterCursor } from './components/MagicGlitterCursor';
 export function App() {
   const [guardianName, setGuardianName] = useState('Guardião do Vale');
   const [stage, setStage] = useState<GameStage>('welcome');
+  const [selectedLocation, setSelectedLocation] = useState<LocationId>('bridge');
   const [currentSeason, setCurrentSeason] = useState<Season>('Primavera');
   const [totalSeeds] = useState(12);
   const [allocation, setAllocation] = useState<SeedAllocation>({ now: 4, protection: 4, future: 4 });
@@ -43,8 +44,9 @@ export function App() {
     switch (stage) {
       case 'map_overview':
         return `Você está no mapa do Vale das Sementes. Aqui você pode explorar a Casa, o Campo, o Mercado, o Silo da Reserva e a Praça Comunitária. Clique em Cuidar do Vale para começar a aventura!`;
+      case 'location_scene':
       case 'bridge_inspection':
-        return `Investigação no Vale! Dona Clara mostra o desafio da ponte antes da chuva. Toque na rachadura na madeira, proteja os suprimentos e converse com os moradores antes de decidir.`;
+        return `Investigação no Vale! Toque nos elementos da cena para descobrir informações, converse com os moradores e veja todas as opções antes de distribuir suas sementes.`;
       case 'narrative_card':
         return `A Ponte de Madeira e a Festa das Flores. Olá, ${guardianName}! A primavera chegou ao Vale. A ponte precisa de reforço e teremos a festa na praça. Você tem 12 sementes para cuidar desta estação.`;
       case 'prediction':
@@ -65,11 +67,17 @@ export function App() {
     setStage('map_overview');
   };
 
+  const handleStartLocation = (locationId: LocationId = 'bridge') => {
+    setSelectedLocation(locationId);
+    setStage('location_scene');
+  };
+
   const handleRestart = () => {
     setAllocation({ now: 4, protection: 4, future: 4 });
     setPredictionCards(['silo_care']);
     setPredictionText('');
     setCurrentSeason('Primavera');
+    setSelectedLocation('bridge');
     setStage('map_overview');
   };
 
@@ -97,14 +105,15 @@ export function App() {
 
         {stage === 'map_overview' && (
           <ValleyMap
-            onStartRound={() => setStage('bridge_inspection')}
+            onStartRound={handleStartLocation}
             activeRoundTitle="Capítulo 1: A Ponte de Madeira e a Festa das Flores"
             onOpenJournal={() => setIsJournalOpen(true)}
           />
         )}
 
-        {stage === 'bridge_inspection' && (
-          <BridgeInspectionScene
+        {(stage === 'location_scene' || stage === 'bridge_inspection') && (
+          <LocationSceneView
+            locationId={selectedLocation}
             guardianName={guardianName}
             onProceedToDecision={() => setStage('prediction')}
             onBackToMap={() => setStage('map_overview')}
@@ -126,7 +135,7 @@ export function App() {
               setPredictionText(customText);
               setStage('seed_allocation');
             }}
-            onBack={() => setStage('bridge_inspection')}
+            onBack={() => setStage('location_scene')}
           />
         )}
 
