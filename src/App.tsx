@@ -99,6 +99,7 @@ export function App() {
           <ValleyMap
             onStartRound={() => setStage('bridge_inspection')}
             activeRoundTitle="Capítulo 1: A Ponte de Madeira e a Festa das Flores"
+            onOpenJournal={() => setIsJournalOpen(true)}
           />
         )}
 

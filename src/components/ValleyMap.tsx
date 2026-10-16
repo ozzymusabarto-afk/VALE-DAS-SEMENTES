@@ -5,6 +5,7 @@ import { soundManager } from '../utils/audio';
 interface ValleyMapProps {
   onStartRound: () => void;
   activeRoundTitle: string;
+  onOpenJournal?: () => void;
 }
 
 interface Hotspot {
@@ -107,7 +108,7 @@ const HOTSPOTS: Hotspot[] = [
   }
 ];
 
-export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundTitle }) => {
+export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundTitle, onOpenJournal }) => {
   const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null);
 
   const handleOpenSpot = (spot: Hotspot) => {
@@ -116,14 +117,17 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
   };
 
   return (
-    <div className="interactive-map-wrapper">
-      {/* Faixa Superior de Missão do Vale */}
+    <div className="interactive-map-wrapper card-board-screen">
+      {/* Cabeçalho do tabuleiro */}
       <div className="map-mission-banner">
         <div className="mission-info">
-          <span className="mission-pill">Missão da Estação</span>
+          <div className="board-kicker-row">
+            <span className="mission-pill">Baralho da Primavera</span>
+            <span className="board-turn-chip">Rodada 1 • 12 sementes</span>
+          </div>
           <h2 className="mission-title">{activeRoundTitle}</h2>
           <p className="mission-subtitle">
-            Dona Clara e o Professor Cornélio precisam da sua sabedoria para organizar as 12 sementes desta primavera.
+            Explore as cartas do Vale, converse com os moradores e escolha por onde começar. O mundo muda conforme você cuida dele.
           </p>
         </div>
 
@@ -133,15 +137,30 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
             onStartRound();
           }}
           className="btn-mission-play"
-          aria-label="Abrir Carta da Estação"
-        >
-          <span>Abrir História da Rodada</span>
+          aria-label="Comprar carta da missão"
+          >
+          <span>Comprar carta da missão</span>
           <ArrowRight size={22} />
         </button>
       </div>
 
-      {/* O Cenário Pintado Interativo */}
-      <div className="map-canvas-container">
+      <div className="card-board-table">
+        <aside className="board-side-rail" aria-label="Baralho da missão">
+          <div className="board-deck mission-deck">
+            <span className="deck-label">CARTA NO TOPO</span>
+            <div className="deck-icon">🌼</div>
+            <strong>A Ponte e a Festa</strong>
+            <span>Uma decisão da estação espera por você.</span>
+          </div>
+          <div className="board-rule-card">
+            <span className="deck-label">COMO JOGAR</span>
+            <p>Escolha uma carta, faça uma ação no Vale e observe o que muda.</p>
+            <div className="rule-dots"><span>1</span><span>2</span><span>3</span></div>
+          </div>
+        </aside>
+
+        {/* O Cenário Pintado Interativo: a mesa do tabuleiro */}
+        <div className="map-canvas-container">
         <img 
           src="/concept_vale_das_sementes.jpg" 
           alt="Mapa Interativo do Vale das Sementes" 
@@ -225,10 +244,58 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
             </div>
           </div>
         )}
+        </div>
+
+        <aside className="board-side-rail board-side-rail-right" aria-label="Estado da estação">
+          <div className="board-status-card">
+            <span className="deck-label">ESTAÇÃO</span>
+            <strong>Primavera</strong>
+            <span>As flores abriram. A ponte precisa de cuidado.</span>
+            <div className="season-progress"><span style={{ width: '25%' }}></span></div>
+            <small>1 de 4 estações</small>
+          </div>
+          <div 
+            className="board-journal-card"
+            onClick={onOpenJournal}
+            role={onOpenJournal ? "button" : undefined}
+            tabIndex={onOpenJournal ? 0 : undefined}
+            style={onOpenJournal ? { cursor: 'pointer' } : undefined}
+          >
+            <span className="deck-label">CARTA DE PAUSA</span>
+            <strong>Diário de Bordo</strong>
+            <span>Registre uma descoberta depois da rodada.</span>
+          </div>
+        </aside>
       </div>
 
+      <section className="card-hand-section" aria-label="Cartas de locais do Vale">
+        <div className="card-hand-heading">
+          <div>
+            <span className="mission-pill">Sua mão de cartas</span>
+            <h3>Escolha um lugar para explorar</h3>
+          </div>
+          <span className="hand-hint">Toque em uma carta e ela aparece no tabuleiro</span>
+        </div>
+        <div className="card-hand">
+          {HOTSPOTS.map((spot, index) => (
+            <button
+              key={spot.id}
+              onClick={() => handleOpenSpot(spot)}
+              className={`location-card ${activeHotspot?.id === spot.id ? 'selected' : ''}`}
+              style={{ '--card-accent': spot.color } as React.CSSProperties}
+            >
+              <span className="location-card-number">{String(index + 1).padStart(2, '0')}</span>
+              <span className="location-card-icon">{spot.icon}</span>
+              <strong>{spot.name}</strong>
+              <span>{spot.role}</span>
+              <span className="location-card-action">Explorar <ArrowRight size={14} /></span>
+            </button>
+          ))}
+        </div>
+      </section>
+
       <div className="map-footer-hint">
-        <span>🌾 <strong>Dica de Guardião:</strong> Toque ou passe o mouse nos símbolos brilhantes da pintura para conhecer cada morador e seus ensinamentos!</span>
+        <span>🌾 <strong>Dica de Guardião:</strong> As cartas são lugares vivos. Quando você volta a uma carta, ela pode estar diferente por causa das escolhas anteriores.</span>
       </div>
     </div>
   );
