@@ -231,12 +231,13 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
               aria-label={`Explorar ${spot.name}`}
               title={`${spot.name} (${spot.character})`}
             >
-              <div className="pin-pulse-wave"></div>
-              <div className="pin-circle-badge">
+              <div className="pin-pulse-wave" style={{ borderColor: spot.color }}></div>
+              <div className="pin-circle-badge" style={{ background: `linear-gradient(135deg, ${spot.color} 0%, #1c1917 140%)` }}>
                 {spot.icon}
               </div>
               <span className="pin-tooltip-label">
-                {spot.name}
+                <strong className="pin-spot-name">{spot.name}</strong>
+                <span className="pin-spot-action" style={{ color: spot.color }}>{spot.actionVerb} ➔</span>
               </span>
             </button>
           ))}
@@ -377,11 +378,19 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
                   {spot.tagline}
                 </p>
 
-                {/* Botão de Ação Interativo */}
-                <div className="card-action-bar">
+                {/* Botão de Ação Interativo com Cor Destacada */}
+                <button 
+                  className="card-action-btn"
+                  style={{ background: `linear-gradient(135deg, ${spot.color} 0%, color-mix(in srgb, ${spot.color} 75%, black) 100%)` }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEnterLocation(spot.id);
+                  }}
+                  aria-label={`Entrar no local: ${spot.name}`}
+                >
                   <span className="card-action-verb">{spot.actionVerb}</span>
-                  <ArrowRight size={14} />
-                </div>
+                  <ArrowRight size={15} />
+                </button>
               </div>
             </div>
           ))}

@@ -488,6 +488,37 @@
   border-top: 1px dashed rgba(0, 0, 0, 0.08);
 }
 
+.card-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff !important;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  margin-top: auto;
+}
+
+.card-action-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  filter: brightness(1.12);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+}
+
+.real-game-card:hover .card-action-btn {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
 .map-mission-banner {
   background: linear-gradient(135deg, #fff9ed 0%, #fef3d6 100%);
   border: 2.5px solid #ecd8ab;
@@ -563,62 +594,102 @@
   user-select: none;
 }
 
-/* Hotspots Vivos */
+/* Hotspots Vivos sobre o Mapa */
 .map-hotspot-pin {
   position: absolute;
   transform: translate(-50%, -50%);
-  z-index: 10;
+  z-index: 15;
   display: flex;
   flex-direction: column;
   align-items: center;
-  pointer-events: auto;
+  background: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.hotspot-bubble-btn {
-  width: 52px;
-  height: 52px;
+.map-hotspot-pin:hover {
+  transform: translate(-50%, -58%) scale(1.15);
+  z-index: 25;
+}
+
+.pin-pulse-wave {
+  position: absolute;
+  top: -4px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3.5px solid var(--pin-accent, #2e7d32);
+  animation: pingPulse 2s infinite ease-out;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+@keyframes pingPulse {
+  0% { transform: scale(0.85); opacity: 0.9; }
+  100% { transform: scale(1.75); opacity: 0; }
+}
+
+.pin-circle-badge {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 3.5px solid #ffffff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-  cursor: pointer;
-  position: relative;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.38), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  font-size: 1.3rem;
   transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  z-index: 2;
 }
 
-.hotspot-bubble-btn:hover {
-  transform: scale(1.22);
+.map-hotspot-pin:hover .pin-circle-badge {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 20px var(--pin-accent, #2e7d32);
 }
 
-.hotspot-ping-wave {
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  border: 3px solid;
-  animation: pingPulse 2s infinite ease-out;
-  opacity: 0.75;
-}
-
-@keyframes pingPulse {
-  0% { transform: scale(0.9); opacity: 0.9; }
-  100% { transform: scale(1.7); opacity: 0; }
-}
-
-.hotspot-tag-label {
-  background: rgba(255, 255, 255, 0.95);
-  color: #2d3748;
-  font-weight: 800;
-  font-size: 0.78rem;
-  padding: 3px 10px;
+.pin-tooltip-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 2px solid #ded3be;
   border-radius: 999px;
-  margin-top: 5px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  padding: 4px 12px;
+  margin-top: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   white-space: nowrap;
-  border: 1px solid #e2e8f0;
   pointer-events: none;
+  transition: all 0.22s ease;
+}
+
+.pin-spot-name {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #292524;
+}
+
+.pin-spot-action {
+  font-size: 0.72rem;
+  font-weight: 900;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+
+.map-hotspot-pin:hover .pin-tooltip-label {
+  background: #1c1917;
+  border-color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+.map-hotspot-pin:hover .pin-spot-name {
+  color: #ffffff;
 }
 
 /* Modal do Hotspot */
