@@ -649,47 +649,12 @@
 }
 
 .map-hotspot-pin:hover .pin-circle-badge {
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 20px var(--pin-accent, #2e7d32);
+  transform: scale(1.18);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 24px var(--pin-accent, #2e7d32);
 }
 
-.pin-tooltip-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.96);
-  border: 2px solid #ded3be;
-  border-radius: 999px;
-  padding: 4px 12px;
-  margin-top: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  pointer-events: none;
-  transition: all 0.22s ease;
-}
-
-.pin-spot-name {
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: #292524;
-}
-
-.pin-spot-action {
-  font-size: 0.72rem;
-  font-weight: 900;
-  background: rgba(0, 0, 0, 0.05);
-  padding: 1px 6px;
-  border-radius: 6px;
-}
-
-.map-hotspot-pin:hover .pin-tooltip-label {
-  background: #1c1917;
-  border-color: #ffffff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-  transform: translateY(-2px);
-}
-
-.map-hotspot-pin:hover .pin-spot-name {
-  color: #ffffff;
+.map-hotspot-pin:active .pin-circle-badge {
+  transform: scale(0.95);
 }
 
 /* Modal do Hotspot */

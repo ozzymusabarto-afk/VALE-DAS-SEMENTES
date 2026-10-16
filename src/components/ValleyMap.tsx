@@ -225,7 +225,7 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
             className="map-image-base"
           />
 
-          {/* Hotspots sobre a pintura panorâmica */}
+          {/* Hotspots sobre a pintura panorâmica - Apenas os botões brilhantes circulares */}
           {HOTSPOTS.map((spot) => (
             <button
               key={spot.id}
@@ -237,16 +237,12 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
                 '--pin-accent': spot.color
               } as React.CSSProperties}
               aria-label={`Explorar ${spot.name}`}
-              title={`${spot.name} (${spot.character})`}
+              title={`${spot.name} - Clique para ver os detalhes`}
             >
               <div className="pin-pulse-wave" style={{ borderColor: spot.color }}></div>
               <div className="pin-circle-badge" style={{ background: `linear-gradient(135deg, ${spot.color} 0%, #1c1917 140%)` }}>
                 {spot.icon}
               </div>
-              <span className="pin-tooltip-label">
-                <strong className="pin-spot-name">{spot.name}</strong>
-                <span className="pin-spot-action" style={{ color: spot.color }}>{spot.actionVerb} ➔</span>
-              </span>
             </button>
           ))}
 
