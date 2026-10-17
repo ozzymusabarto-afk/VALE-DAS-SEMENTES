@@ -18,17 +18,22 @@ const AUDIO_PLAYBACK_RATES: Record<SpeechPace, number> = {
 export const TEST_SAMPLE_PHRASE = 
   "Olá, guardião. Vamos caminhar com calma pelo Vale. Cada semente que você cuida pode ajudar a construir uma escolha mais tranquila.";
 
+const CURRENT_VOICE_VERSION = 'male-narrator-v2';
+const STORAGE_KEY_VOICE_VERSION = 'vale-das-sementes-voice-version';
 const STORAGE_KEY_VOICE = 'vale-das-sementes-voice';
 const STORAGE_KEY_PACE = 'vale-das-sementes-speech-pace';
 const STORAGE_KEY_MUTED = 'vale-das-sementes-speech-muted';
 
-// Mapeamento de áudios de estúdio do Vovô Narrador (Voz Genuína pt-BR-AntonioNatural)
-export function findPreRecordedAudio(text: string): string | null {
-  const t = text.toLowerCase();
-  
-  // 1. Demonstração / Teste
+const AUDIO_CACHE_TAG = '?v=male-v2';
+
+function audioWithVersion(path: string): string {
+  return `${path}${AUDIO_CACHE_TAG}`;
+}
+
+function getRawAudioPath(t: string): string | null {
+  // 1. Demonstração / Teste Oficial (Áudio genuíno do Vovô Narrador)
   if (t.includes('caminhar com calma pelo vale') || t.includes('olá, guardião. vamos caminhar') || t.includes('ola, guardiao. vamos caminhar')) {
-    return '/audio/narration/teste-narrador.mp3';
+    return '/audio/narration/teste-vovo-narrador.wav?v=2';
   }
 
   // 2. Fases Principais
@@ -250,6 +255,17 @@ export function findPreRecordedAudio(text: string): string | null {
   return null;
 }
 
+// Mapeamento de áudios de estúdio do Vovô Narrador (Voz Genuína pt-BR-AntonioNatural e teste-vovo-narrador.wav)
+export function findPreRecordedAudio(text: string): string | null {
+  const t = text.toLowerCase();
+  const rawPath = getRawAudioPath(t);
+  if (!rawPath) return null;
+  if (rawPath.startsWith('/audio/narration/teste-vovo-narrador.wav')) {
+    return rawPath;
+  }
+  return audioWithVersion(rawPath);
+}
+
 export function scoreVoice(voice: SpeechSynthesisVoice): number {
   const name = voice.name.toLowerCase();
   const lang = voice.lang.toLowerCase();
@@ -261,25 +277,30 @@ export function scoreVoice(voice: SpeechSynthesisVoice): number {
   } else if (lang.startsWith('pt')) {
     score += 30;
   } else {
-    return -1000; // Descartar outros idiomas
+    return -5000; // Descartar outros idiomas
+  }
+
+  // Filtragem e rejeição estrita de qualquer voz feminina ou de GPS robótica
+  const femaleKeywords = [
+    'maria', 'helena', 'zira', 'leticia', 'letícia', 'francisca', 'luciana', 
+    'raquel', 'vitoria', 'vitória', 'fernanda', 'camila', 'female', 'mulher', 
+    'feminina', 'woman', 'girl'
+  ];
+  if (femaleKeywords.some(keyword => name.includes(keyword))) {
+    return -5000; // Descartar totalmente vozes femininas
+  }
+
+  // Penalizar vozes de Portugal quando o jogo é focado em pt-BR
+  if (name.includes('portugal') || lang === 'pt-pt') {
+    return -1000;
   }
 
   // Vozes masculinas e naturais de alta qualidade no Windows, Edge e Chrome
-  if (name.includes('antonio')) score += 80; // Microsoft Antonio (Natural)
+  if (name.includes('antonio') || name.includes('antônio')) score += 120; // Microsoft Antonio (Natural)
   if (name.includes('natural')) score += 45;
   if (name.includes('online')) score += 25;
-  if (name.includes('google')) score += 20; // Google português do Brasil
-  if (name.includes('brasil') || name.includes('brazil')) score += 20;
-  if (name.includes('francisco') || name.includes('thiago') || name.includes('felipe')) score += 30;
-
-  // Penalizar vozes conhecidas por soar robóticas, femininas ou de Portugal
-  if (name.includes('portugal') || lang === 'pt-pt') score -= 50;
-  if (name.includes('female')) score -= 25;
-  if (name.includes('zira')) score -= 25;
-  if (name.includes('helena')) score -= 20;
-  if (name.includes('maria')) score -= 20;
-  if (name.includes('leticia')) score -= 20;
-  if (name.includes('francisca')) score -= 20;
+  if (name.includes('francisco') || name.includes('thiago') || name.includes('felipe') || name.includes('ricardo')) score += 80;
+  if (name.includes('male') || name.includes('homem') || name.includes('masculino')) score += 50;
 
   return score;
 }
@@ -301,8 +322,15 @@ class SpeechHelper {
 
   private loadPreferences() {
     try {
-      const savedVoice = localStorage.getItem(STORAGE_KEY_VOICE);
-      if (savedVoice) this.selectedVoiceURI = savedVoice;
+      const savedVersion = localStorage.getItem(STORAGE_KEY_VOICE_VERSION);
+      if (savedVersion !== CURRENT_VOICE_VERSION) {
+        localStorage.removeItem(STORAGE_KEY_VOICE);
+        localStorage.setItem(STORAGE_KEY_VOICE_VERSION, CURRENT_VOICE_VERSION);
+        this.selectedVoiceURI = null;
+      } else {
+        const savedVoice = localStorage.getItem(STORAGE_KEY_VOICE);
+        if (savedVoice) this.selectedVoiceURI = savedVoice;
+      }
 
       const savedPace = localStorage.getItem(STORAGE_KEY_PACE) as SpeechPace;
       if (savedPace && (savedPace === 'slow' || savedPace === 'calm' || savedPace === 'normal')) {
@@ -355,8 +383,21 @@ class SpeechHelper {
       return lang === 'pt-br' || lang.startsWith('pt');
     });
 
-    // Ordena da melhor pontuação para a menor
-    return ptVoices.sort((a, b) => scoreVoice(b) - scoreVoice(a));
+    // Ordena da melhor pontuação para a menor, descartando vozes inválidas
+    return ptVoices
+      .filter(v => scoreVoice(v) > -1000)
+      .sort((a, b) => scoreVoice(b) - scoreVoice(a));
+  }
+
+  public hasNativeMaleVoice(): boolean {
+    const ptVoices = this.getAvailablePtVoices();
+    return ptVoices.some(v => scoreVoice(v) > 0);
+  }
+
+  public getSelectedVoiceDisplayName(): string {
+    const v = this.getSelectedVoice();
+    if (!v) return 'Nenhuma voz do sistema compatível';
+    return v.name;
   }
 
   public getSelectedVoice(): SpeechSynthesisVoice | null {

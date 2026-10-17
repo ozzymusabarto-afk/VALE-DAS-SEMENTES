@@ -126,6 +126,7 @@ export function App() {
 
         {(stage === 'location_scene' || stage === 'bridge_inspection') && (
           <LocationSceneView
+            key={selectedLocation}
             locationId={selectedLocation}
             guardianName={guardianName}
             onProceedToDecision={() => setStage('prediction')}

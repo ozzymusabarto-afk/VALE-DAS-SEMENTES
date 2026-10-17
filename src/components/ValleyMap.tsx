@@ -181,12 +181,12 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
         <button
           onClick={() => {
             soundManager.playMagicSparkle();
-            handleEnterLocation('bridge');
+            handleEnterLocation(activeHotspot ? activeHotspot.id : 'bridge');
           }}
           className="btn-mission-play"
-          aria-label="Comprar carta da missão da ponte"
+          aria-label={activeHotspot ? `Entrar no local: ${activeHotspot.name}` : "Começar pela Missão da Ponte"}
         >
-          <span>Comprar carta da missão</span>
+          <span>{activeHotspot ? `Entrar em ${activeHotspot.name}` : "Jogar Missão da Primavera"}</span>
           <ArrowRight size={22} />
         </button>
       </div>
@@ -196,16 +196,16 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
         <aside className="board-side-rail" aria-label="Baralho da missão">
           <div 
             className="board-deck mission-deck" 
-            onClick={() => handleEnterLocation('bridge')}
+            onClick={() => handleEnterLocation(activeHotspot ? activeHotspot.id : 'bridge')}
             style={{ cursor: 'pointer' }}
-            title="Clique para ir à missão da ponte"
+            title={activeHotspot ? `Clique para ir a ${activeHotspot.name}` : "Clique para ir à missão da ponte"}
           >
-            <span className="deck-label">CARTA NO TOPO</span>
-            <div className="deck-icon">🌼</div>
-            <strong>A Ponte e a Festa</strong>
-            <span>Uma decisão da estação espera por você.</span>
+            <span className="deck-label">{activeHotspot ? "LOCAL SELECIONADO" : "CARTA NO TOPO"}</span>
+            <div className="deck-icon">{activeHotspot ? activeHotspot.icon : "🌼"}</div>
+            <strong>{activeHotspot ? activeHotspot.name : "A Ponte e a Festa"}</strong>
+            <span>{activeHotspot ? activeHotspot.tagline : "Uma decisão da estação espera por você."}</span>
             <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 800, color: '#e65100' }}>
-              <span>Jogar agora</span>
+              <span>{activeHotspot ? `Jogar ${activeHotspot.actionVerb}` : "Jogar agora"}</span>
               <ArrowRight size={14} />
             </div>
           </div>

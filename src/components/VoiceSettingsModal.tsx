@@ -147,18 +147,34 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({ isOpen, 
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
-          marginBottom: '18px'
+          marginBottom: '14px'
         }}>
           <div style={{ fontSize: '1.6rem' }} aria-hidden="true">👴🏼</div>
           <div>
             <strong style={{ display: 'block', color: '#166534', fontSize: '0.94rem' }}>
-              Voz de Vovô Amoroso (Estúdio pt-BR Ativa)
+              Voz de Estúdio Ativa: Vovô Amoroso (teste-vovo-narrador.wav)
             </strong>
             <span style={{ fontSize: '0.82rem', color: '#334155' }}>
-              Tom firme, sereno e simpático gravado em estúdio com pausas naturais.
+              Tom firme, sereno e simpático reproduzido a partir do áudio gravado em estúdio.
             </span>
           </div>
         </div>
+
+        {/* Aviso se navegador não tiver voz nativa masculina */}
+        {!speechHelper.hasNativeMaleVoice() && (
+          <div style={{
+            background: '#fffbeb',
+            border: '1.5px solid #fde68a',
+            borderRadius: '12px',
+            padding: '10px 14px',
+            marginBottom: '16px',
+            fontSize: '0.82rem',
+            color: '#92400e',
+            lineHeight: '1.4'
+          }}>
+            ⚠️ Este navegador não possui uma voz masculina brasileira instalada. Os áudios gravados em estúdio funcionarão perfeitamente, mas a leitura livre pode variar conforme o sistema.
+          </div>
+        )}
 
         {/* Seletor de Vozes pt-BR (Fallback) */}
         <div style={{ marginBottom: '18px' }}>

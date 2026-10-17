@@ -345,23 +345,23 @@
 
 .card-hand {
   display: grid;
-  grid-template-columns: repeat(7, minmax(140px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(7, minmax(160px, 1fr));
+  gap: 14px;
   overflow-x: auto;
-  padding: 8px 6px 20px;
+  padding: 10px 8px 24px;
   scrollbar-color: #b18b5d #f2e8d5;
 }
 
-/* Cartas de Jogo Reais com proporção vertical e arte */
+/* Cartas de Jogo Reais com proporção vertical ~2:3 e arte proeminente */
 .real-game-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 230px;
+  min-height: 290px;
   border-radius: 18px;
   background: linear-gradient(165deg, #fffdfa 0%, #f7efdc 100%);
-  border: 2px solid color-mix(in srgb, var(--card-accent) 45%, #d8c29d);
-  box-shadow: 0 8px 18px rgba(60, 42, 22, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  border: 2.5px solid color-mix(in srgb, var(--card-accent) 50%, #d8c29d);
+  box-shadow: 0 10px 22px rgba(60, 42, 22, 0.16), inset 0 0 0 1px rgba(255, 255, 255, 0.7);
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   overflow: hidden;
@@ -370,7 +370,7 @@
 
 .real-game-card:hover, .real-game-card.selected {
   transform: translateY(-9px) rotate(-1.5deg) scale(1.02);
-  box-shadow: 0 16px 30px rgba(60, 42, 22, 0.25);
+  box-shadow: 0 18px 34px rgba(60, 42, 22, 0.28);
   border-color: var(--card-accent);
 }
 
@@ -404,7 +404,7 @@
 .card-artwork-frame {
   position: relative;
   width: 100%;
-  height: 96px;
+  height: 145px;
   overflow: hidden;
   background: #2b1d16;
 }
@@ -984,8 +984,29 @@
 }
 
 .pile-seed {
-  font-size: 1.35rem;
-  animation: seedBounce 0.25s ease-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: radial-gradient(circle at 35% 30%, #fef08a 0%, #eab308 55%, #a16207 100%);
+  border-radius: 50% 50% 50% 15% / 60% 60% 40% 40%;
+  box-shadow: 0 3px 6px rgba(113, 63, 18, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.85);
+  font-size: 1.15rem;
+  color: #713f12;
+  animation: seedBounce 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: rotate(-20deg);
+  cursor: default;
+}
+
+.pile-seed.protection-seed {
+  background: radial-gradient(circle at 35% 30%, #bbf7d0 0%, #22c55e 55%, #15803d 100%);
+  box-shadow: 0 3px 6px rgba(21, 128, 61, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.85);
+}
+
+.pile-seed.future-seed {
+  background: radial-gradient(circle at 35% 30%, #bfdbfe 0%, #3b82f6 55%, #1d4ed8 100%);
+  box-shadow: 0 3px 6px rgba(29, 78, 216, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.85);
 }
 
 @keyframes seedBounce {
@@ -1018,12 +1039,22 @@
   color: #78716c;
 }
 
-/* Estados visuais das cestas */
-.seed-basket--starter { border-color: #cbd5e1; }
-.seed-basket--growing { border-color: #f59e0b; }
+/* Estados visuais dinâmicos das cestas de vime */
+.seed-basket--empty {
+  border-color: #d6c6ad;
+  opacity: 0.9;
+}
+.seed-basket--starter {
+  border-color: #94a3b8;
+  box-shadow: 0 8px 20px rgba(100, 116, 139, 0.15);
+}
+.seed-basket--growing {
+  border-color: #f59e0b;
+  box-shadow: 0 10px 26px rgba(245, 158, 11, 0.22);
+}
 .seed-basket--full {
-  border-color: #22c55e;
-  box-shadow: 0 10px 28px rgba(34, 197, 94, 0.22);
+  border-color: #16a34a;
+  box-shadow: 0 12px 30px rgba(22, 163, 74, 0.28);
 }
 
 .basket-card {
