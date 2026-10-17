@@ -603,15 +603,20 @@
 .map-canvas-container {
   position: relative;
   width: 100%;
-  border-radius: 26px;
+  max-width: 960px;
+  margin: 0 auto;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 14px 36px rgba(50, 35, 20, 0.18), 0 0 0 6px #faf5ec, 0 0 0 10px #dcd0bd;
-  background: #3e2723;
+  aspect-ratio: 16 / 9;
+  box-shadow: 0 14px 36px rgba(50, 35, 20, 0.22), 0 0 0 5px #faf5ec, 0 0 0 9px #dcd0bd;
+  background: #2b1d16;
 }
 
+.map-image-base,
 .map-landscape-image {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
   user-select: none;
 }

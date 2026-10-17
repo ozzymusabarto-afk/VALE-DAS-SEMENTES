@@ -175,7 +175,7 @@ export const SeedAllocationStage: React.FC<SeedAllocationStageProps> = ({
             <img 
               src="/cena-casa-fazenda.webp" 
               alt="Casa e família"
-              onError={(e) => { (e.target as HTMLImageElement).src = '/mapa-vale-vivo.webp'; }}
+              onError={(e) => { (e.target as HTMLImageElement).src = '/concept_vale_das_sementes.jpg'; }}
               className="basket-mini-preview"
             />
             <div className="basket-wicker-weave">
