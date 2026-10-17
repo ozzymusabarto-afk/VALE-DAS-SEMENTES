@@ -81,6 +81,19 @@ export function App() {
     setStage('map_overview');
   };
 
+  const getLocationGoalText = (loc: LocationId) => {
+    switch (loc) {
+      case 'market': return "O Mercado e o Consumo Consciente";
+      case 'workshop': return "A Oficina e a Manutenção Preventiva";
+      case 'house': return "A Casa e o Alimento em Família";
+      case 'silo': return "O Silo e a Reserva de Proteção";
+      case 'field': return "A Horta e a Paciência do Tempo";
+      case 'bridge': return "A Ponte e a Cooperação Comunitária";
+      case 'woods': return "O Bosque e os Sonhos de Longo Prazo";
+      default: return "A Ponte e o Vilarejo";
+    }
+  };
+
   return (
     <div className="app-container">
       <AmbientParticles season={currentSeason} />
@@ -90,7 +103,7 @@ export function App() {
           currentSeeds={Math.max(0, remainingFreeSeeds)}
           totalSeeds={totalSeeds}
           seasonText={`${currentSeason} • Ano 1`}
-          goalText={currentSeason === 'Primavera' ? "A Ponte e a Casa" : "A Horta e a Cisterna"}
+          goalText={getLocationGoalText(selectedLocation)}
           onOpenJournal={() => setIsJournalOpen(true)}
           accessibility={accessibility}
           setAccessibility={setAccessibility}
@@ -130,6 +143,8 @@ export function App() {
 
         {stage === 'prediction' && (
           <PredictionStage
+            key={selectedLocation}
+            locationId={selectedLocation}
             onConfirmPrediction={(cards, customText) => {
               setPredictionCards(cards);
               setPredictionText(customText);
@@ -167,6 +182,8 @@ export function App() {
 
         {stage === 'consequence' && (
           <ConsequenceStage
+            key={selectedLocation}
+            locationId={selectedLocation}
             allocation={allocation}
             onOpenJournal={() => setIsJournalOpen(true)}
           />
