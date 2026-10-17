@@ -220,7 +220,7 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
         {/* Centro: O Cenário Pintado Interativo */}
         <div className="map-canvas-container">
           <img 
-            src="/concept_vale_das_sementes.jpg" 
+            src="/mapa-vale-vivo.webp" 
             alt="Mapa Interativo do Vale das Sementes" 
             className="map-image-base"
           />
@@ -279,7 +279,7 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
                     src={activeHotspot.image} 
                     alt={activeHotspot.name} 
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    onError={(e) => { (e.target as HTMLImageElement).src = '/concept_vale_das_sementes.jpg'; }}
+                    onError={(e) => { (e.target as HTMLImageElement).src = '/mapa-vale-vivo.webp'; }}
                   />
                 </div>
 
@@ -366,7 +366,7 @@ export const ValleyMap: React.FC<ValleyMapProps> = ({ onStartRound, activeRoundT
                   src={spot.image} 
                   alt={spot.name} 
                   className="card-artwork-img"
-                  onError={(e) => { (e.target as HTMLImageElement).src = '/concept_vale_das_sementes.jpg'; }}
+                  onError={(e) => { (e.target as HTMLImageElement).src = '/mapa-vale-vivo.webp'; }}
                 />
                 <span className="card-category-seal">{spot.category}</span>
               </div>

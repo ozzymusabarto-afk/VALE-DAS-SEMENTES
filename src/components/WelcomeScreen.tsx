@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Compass, ShieldCheck, Heart, ArrowRight, Sparkles, Volume2 } from 'lucide-react';
+import { Compass, ShieldCheck, Heart, ArrowRight, Sparkles, Volume2, BookOpen, ListChecks, Sprout } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 import { speechHelper } from '../utils/speech';
 
@@ -86,6 +86,18 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
 
       {/* Cartão de Entrada e Criação do Personagem */}
       <div className="storybook-entry-card">
+        <div className="welcome-purpose">
+          <div className="welcome-purpose-heading">
+            <span className="welcome-purpose-kicker">Antes de começar</span>
+            <h2>Uma aventura para aprender a cuidar das escolhas</h2>
+            <p>Para crianças a partir de 7 anos. Aqui, prosperidade não é ter mais que os outros: é ter mais clareza, segurança e liberdade para escolher.</p>
+          </div>
+          <div className="welcome-how-to-play">
+            <div><BookOpen size={19} /><strong>O que você faz</strong><span>Explora lugares, conversa e decide.</span></div>
+            <div><ListChecks size={19} /><strong>Como joga</strong><span>Prevê, distribui sementes e observa consequências.</span></div>
+            <div><Sprout size={19} /><strong>O que leva</strong><span>Ideias para usar recursos com consciência na vida real.</span></div>
+          </div>
+        </div>
         <div className="pillar-cards-row">
           <div className="pillar-badge">
             <div className="pillar-icon amber">
