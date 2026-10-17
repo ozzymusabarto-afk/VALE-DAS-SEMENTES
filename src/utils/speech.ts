@@ -22,13 +22,16 @@ const STORAGE_KEY_VOICE = 'vale-das-sementes-voice';
 const STORAGE_KEY_PACE = 'vale-das-sementes-speech-pace';
 const STORAGE_KEY_MUTED = 'vale-das-sementes-speech-muted';
 
-// Mapeamento de áudios de estúdio do Vovô Narrador
+// Mapeamento de áudios de estúdio do Vovô Narrador (Voz Genuína pt-BR-AntonioNatural)
 export function findPreRecordedAudio(text: string): string | null {
   const t = text.toLowerCase();
   
+  // 1. Demonstração / Teste
   if (t.includes('caminhar com calma pelo vale') || t.includes('olá, guardião. vamos caminhar') || t.includes('ola, guardiao. vamos caminhar')) {
     return '/audio/narration/teste-narrador.mp3';
   }
+
+  // 2. Fases Principais
   if (t.includes('mapa do vale das sementes')) {
     return '/audio/narration/map_overview.mp3';
   }
@@ -38,11 +41,17 @@ export function findPreRecordedAudio(text: string): string | null {
   if (t.includes('ponte de madeira e a festa das flores') && (t.includes('primavera') || t.includes('chegou ao vale') || t.includes('doze sementes') || t.includes('12 sementes'))) {
     return '/audio/narration/narrative_card.mp3';
   }
-  if (t.includes('hora da previsão') || t.includes('hora da previsao')) {
+  if (t.includes('hora da previsão!') || t.includes('hora da previsao!') || t.includes('o que você acha que pode acontecer antes de distribuir as sementes')) {
     return '/audio/narration/prediction.mp3';
+  }
+  if (t.includes('sementes douradas para distribuir') || t.includes('arraste ou toque nas sementes para colocar nas três cestas')) {
+    return '/audio/narration/seed_allocation_instructions.mp3';
   }
   if (t.includes('distribua suas') || (t.includes('sementes entre agora') && t.includes('proteção no silo'))) {
     return '/audio/narration/seed_allocation.mp3';
+  }
+  if (t.includes('trancar as janelas da casa e proteger a colheita') || t.includes('nuvens carregadas e chuva forte')) {
+    return '/audio/narration/storm_alert.mp3';
   }
   if (t.includes('ventania da virada de estação') || t.includes('ventania da virada de estacao')) {
     return '/audio/narration/season_transition.mp3';
@@ -50,36 +59,194 @@ export function findPreRecordedAudio(text: string): string | null {
   if (t.includes('compreendendo o resultado') || t.includes('vento soprou e soltou')) {
     return '/audio/narration/consequence.mp3';
   }
-  if (t.includes('excelente decisão') || t.includes('excelente decisao') || t.includes('comunidade permaneceu segura')) {
+  if (t.includes('excelente decisão de proteção') || t.includes('excelente decisao de protecao') || t.includes('comunidade permaneceu segura e confiante')) {
     return '/audio/narration/consequence_protected.mp3';
   }
-  if (t.includes('aprendizado valioso') || t.includes('reserva no silo faz falta')) {
+  if (t.includes('toda escolha traz um aprendizado valioso') || t.includes('reserva no silo faz falta')) {
     return '/audio/narration/consequence_learning.mp3';
   }
   if (t.includes('diário de bordo') || t.includes('diario de bordo')) {
     return '/audio/narration/introducao_diario.mp3';
   }
-  if (t.includes('mercado da raposa') || t.includes('consumo consciente')) {
+
+  // 3. Metas dos Locais
+  if (t.includes('o mercado e o consumo consciente') || t.includes('mercado da raposa. no mercado')) {
     return '/audio/narration/loc_market.mp3';
   }
-  if (t.includes('oficina de tomás') || t.includes('oficina de tomas') || t.includes('manutenção preventiva')) {
+  if (t.includes('a oficina e a manutenção preventiva') || t.includes('oficina de tomás. cuidar e fazer')) {
     return '/audio/narration/loc_workshop.mp3';
   }
-  if (t.includes('casa da fazenda') || t.includes('alimento em família')) {
+  if (t.includes('a casa e o alimento em família') || t.includes('casa da fazenda. o bem-estar')) {
     return '/audio/narration/loc_house.mp3';
   }
-  if (t.includes('silo da reserva') || t.includes('reserva de proteção')) {
+  if (t.includes('o silo e a reserva de proteção') || t.includes('silo da reserva. guardar sementes')) {
     return '/audio/narration/loc_silo.mp3';
   }
-  if (t.includes('horta de cornélio') || t.includes('horta de cornelio') || t.includes('paciência do tempo')) {
+  if (t.includes('a horta e a paciência do tempo') || t.includes('horta de cornélio. cada semente precisa')) {
     return '/audio/narration/loc_field.mp3';
   }
-  if (t.includes('bosque das montanhas') || t.includes('sonhos de longo prazo')) {
+  if (t.includes('o bosque e os sonhos de longo prazo') || t.includes('bosque das montanhas. olhar para o horizonte')) {
     return '/audio/narration/loc_woods.mp3';
   }
-  if (t.includes('ponte de madeira') || t.includes('cooperação comunitária')) {
+  if (t.includes('a ponte e a cooperação comunitária') || t.includes('ponte de madeira e a festa. a ponte é o caminho')) {
     return '/audio/narration/loc_bridge.mp3';
   }
+
+  // 4. Falas de Introdução das Cenas dos Moradores
+  if (t.includes('banca parece delicioso e urgente') || t.includes('compare as cestas antes de decidir')) {
+    return '/audio/narration/intro_scene_market.mp3';
+  }
+  if (t.includes('quem cuida da ferramenta hoje') || t.includes('consertar antes de quebrar de vez')) {
+    return '/audio/narration/intro_scene_workshop.mp3';
+  }
+  if (t.includes('a casa é o nosso refúgio') || t.includes('a casa e o nosso refugio') || t.includes('viver com saúde, afeto e dignidade')) {
+    return '/audio/narration/intro_scene_house.mp3';
+  }
+  if (t.includes('silo não serve para nos tornar mais ricos') || t.includes('silo nao serve para nos tornar mais ricos') || t.includes('comprar tempo e liberdade de escolha')) {
+    return '/audio/narration/intro_scene_silo.mp3';
+  }
+  if (t.includes('não adianta puxar a folha') || t.includes('nao adianta puxar a folha') || t.includes('dedicação diária é o maior segredo')) {
+    return '/audio/narration/intro_scene_field.mp3';
+  }
+  if (t.includes('ponte ainda aguenta nossos passos') || t.includes('veja a ponte da primavera')) {
+    return '/audio/narration/intro_scene_bridge.mp3';
+  }
+  if (t.includes('bosque nos ensina a olhar longe') || t.includes('raízes fundas e constância')) {
+    return '/audio/narration/intro_scene_woods.mp3';
+  }
+
+  // 5. Previsões de Cada Local
+  if (t.includes('previsão no mercado da raposa') || t.includes('previsao no mercado da raposa')) {
+    return '/audio/narration/pred_market.mp3';
+  }
+  if (t.includes('previsão na oficina de ferramentas') || t.includes('previsao na oficina de ferramentas')) {
+    return '/audio/narration/pred_workshop.mp3';
+  }
+  if (t.includes('previsão na casa da fazenda') || t.includes('previsao na casa da fazenda') || t.includes('bem-estar da casa')) {
+    return '/audio/narration/pred_house.mp3';
+  }
+  if (t.includes('previsão no silo da reserva') || t.includes('previsao no silo da reserva')) {
+    return '/audio/narration/pred_silo.mp3';
+  }
+  if (t.includes('previsão na horta de cornélio') || t.includes('previsao na horta de cornelio')) {
+    return '/audio/narration/pred_field.mp3';
+  }
+  if (t.includes('previsão na ponte de madeira') || t.includes('previsao na ponte de madeira')) {
+    return '/audio/narration/pred_bridge.mp3';
+  }
+  if (t.includes('previsão no bosque das montanhas') || t.includes('previsao no bosque das montanhas')) {
+    return '/audio/narration/pred_woods.mp3';
+  }
+
+  // 6. Consequências de Cada Local
+  if (t.includes('no mercado da raposa, você comprou o que era necessário') || t.includes('mercado da raposa, voce comprou')) {
+    return '/audio/narration/csq_market_pos.mp3';
+  }
+  if (t.includes('no mercado, muitas coisas chamavam a atenção') || t.includes('muitas coisas chamavam a atencao')) {
+    return '/audio/narration/csq_market_lea.mp3';
+  }
+  if (t.includes('suas ferramentas estão prontas e a fazenda tem reserva') || t.includes('suas ferramentas estao prontas')) {
+    return '/audio/narration/csq_workshop_pos.mp3';
+  }
+  if (t.includes('na oficina, vimos que ferramentas quebram sem avisar')) {
+    return '/audio/narration/csq_workshop_lea.mp3';
+  }
+  if (t.includes('a despensa da casa está cheia e a família protegida') || t.includes('despensa da casa esta cheia')) {
+    return '/audio/narration/csq_house_pos.mp3';
+  }
+  if (t.includes('a casa precisou de reparos extras')) {
+    return '/audio/narration/csq_house_lea.mp3';
+  }
+  if (t.includes('o silo da reserva cumpriu seu papel')) {
+    return '/audio/narration/csq_silo_pos.mp3';
+  }
+  if (t.includes('o silo precisava de mais suprimentos')) {
+    return '/audio/narration/csq_silo_lea.mp3';
+  }
+  if (t.includes('que colheita abençoada! a paciência do tempo') || t.includes('que colheita abencoada')) {
+    return '/audio/narration/csq_field_pos.mp3';
+  }
+  if (t.includes('a terra pede tempo e cuidado contínuo') || t.includes('cuidado continuo')) {
+    return '/audio/narration/csq_field_lea.mp3';
+  }
+  if (t.includes('a ponte ficou firme e segura! a festa das flores')) {
+    return '/audio/narration/csq_bridge_pos.mp3';
+  }
+  if (t.includes('o vento abalou a ponte de madeira')) {
+    return '/audio/narration/csq_bridge_lea.mp3';
+  }
+  if (t.includes('que visão magnífica do alto do bosque') || t.includes('que visao magnifica')) {
+    return '/audio/narration/csq_woods_pos.mp3';
+  }
+  if (t.includes('o mirante nos mostrou o valor da constância') || t.includes('valor da constancia')) {
+    return '/audio/narration/csq_woods_lea.mp3';
+  }
+
+  // 7. Diálogos Explicativos dos Moradores
+  if (t.includes('necessidades são coisas essenciais para nossa saúde') || t.includes('necessidades sao coisas essenciais')) {
+    return '/audio/narration/diag_market_q1.mp3';
+  }
+  if (t.includes('muitas vezes as placas dizem só hoje') || t.includes('placas dizem so hoje')) {
+    return '/audio/narration/diag_market_q2.mp3';
+  }
+  if (t.includes('quando não gastamos tudo por impulso') || t.includes('quando nao gastamos tudo por impulso')) {
+    return '/audio/narration/diag_market_q3.mp3';
+  }
+  if (t.includes('quase sempre o conserto a tempo custa apenas uma fração') || t.includes('apenas uma fracao')) {
+    return '/audio/narration/diag_workshop_q1.mp3';
+  }
+  if (t.includes('uma telha frouxa derruba o telhado')) {
+    return '/audio/narration/diag_workshop_q2.mp3';
+  }
+  if (t.includes('quem sabe consertar, plantar ou construir')) {
+    return '/audio/narration/diag_workshop_q3.mp3';
+  }
+  if (t.includes('poupar não significa passar necessidade') || t.includes('poupar nao significa passar necessidade')) {
+    return '/audio/narration/diag_house_q1.mp3';
+  }
+  if (t.includes('pagar as trocas combinadas na data certa')) {
+    return '/audio/narration/diag_house_q2.mp3';
+  }
+  if (t.includes('prosperidade não é ter luxos caros') || t.includes('prosperidade nao e ter luxos caros')) {
+    return '/audio/narration/diag_house_q3.mp3';
+  }
+  if (t.includes('quem guarda para ostentar quer ser maior')) {
+    return '/audio/narration/diag_silo_q1.mp3';
+  }
+  if (t.includes('sem reserva, qualquer chuva forte nos obriga')) {
+    return '/audio/narration/diag_silo_q2.mp3';
+  }
+  if (t.includes('quando você tem sementes guardadas') || t.includes('voce nao aceita ofertas enganosas')) {
+    return '/audio/narration/diag_silo_q3.mp3';
+  }
+  if (t.includes('promessas de crescimento rápido e milagroso') || t.includes('crescimento rapido e milagroso')) {
+    return '/audio/narration/diag_field_q1.mp3';
+  }
+  if (t.includes('se colhermos a muda pequenininha')) {
+    return '/audio/narration/diag_field_q2.mp3';
+  }
+  if (t.includes('colocar uma única semente no silo') || t.includes('colocar uma unica semente no silo')) {
+    return '/audio/narration/diag_field_q3.mp3';
+  }
+  if (t.includes('natureza nunca dá certeza absoluta') || t.includes('natureza nunca da certeza absoluta')) {
+    return '/audio/narration/diag_bridge_q1.mp3';
+  }
+  if (t.includes('três a quatro sementes reservadas para o depois') || t.includes('3 a 4 sementes reservadas para o depois')) {
+    return '/audio/narration/diag_bridge_q2.mp3';
+  }
+  if (t.includes('o silo é a proteção do vale. se o vento soltar telhas') || t.includes('o silo e a protecao do vale')) {
+    return '/audio/narration/diag_bridge_q3.mp3';
+  }
+  if (t.includes('aprender uma profissão, reflorestar uma colina') || t.includes('aprender uma profissao')) {
+    return '/audio/narration/diag_woods_q1.mp3';
+  }
+  if (t.includes('guardar todas as suas sementes para o futuro distante')) {
+    return '/audio/narration/diag_woods_q2.mp3';
+  }
+  if (t.includes('olhe para trás e veja o quanto você já aprendeu') || t.includes('olhe para tras e veja o quanto voce')) {
+    return '/audio/narration/diag_woods_q3.mp3';
+  }
+
   return null;
 }
 

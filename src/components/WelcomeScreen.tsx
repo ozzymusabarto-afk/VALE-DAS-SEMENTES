@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Compass, ShieldCheck, Heart, ArrowRight, Sparkles } from 'lucide-react';
+import { Compass, ShieldCheck, Heart, ArrowRight, Sparkles, Volume2 } from 'lucide-react';
 import { soundManager } from '../utils/audio';
+import { speechHelper } from '../utils/speech';
 
 interface WelcomeScreenProps {
   onStart: (guardianName: string) => void;
@@ -8,11 +9,25 @@ interface WelcomeScreenProps {
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
   const [name, setName] = useState('Guardião');
+  const [isNarrating, setIsNarrating] = useState(false);
 
   const handleStart = (e: React.FormEvent) => {
     e.preventDefault();
+    speechHelper.stop();
     soundManager.playChime();
     onStart(name.trim() || 'Guardião');
+  };
+
+  const handleToggleNarrator = () => {
+    if (isNarrating) {
+      speechHelper.stop();
+      setIsNarrating(false);
+    } else {
+      setIsNarrating(true);
+      speechHelper.playTestSample(() => {
+        setIsNarrating(false);
+      });
+    }
   };
 
   return (
@@ -40,6 +55,32 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
           <p className="storybook-subtitle">
             Cuidar, planejar e florescer: aprenda a lidar com os recursos da vida em um vale acolhedor onde prosperidade é viver com consciência e liberdade.
           </p>
+
+          <div style={{ marginTop: '12px' }}>
+            <button
+              type="button"
+              onClick={handleToggleNarrator}
+              className="btn-secondary"
+              style={{
+                background: 'rgba(255, 255, 255, 0.94)',
+                color: '#1b5e20',
+                fontWeight: 700,
+                fontSize: '0.88rem',
+                border: '1.5px solid #81c784',
+                padding: '8px 18px',
+                borderRadius: '999px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+              }}
+              title="Ouvir mensagem de acolhimento do Vovô Narrador"
+            >
+              <Volume2 size={16} />
+              <span>{isNarrating ? 'Ouvindo o Vovô Narrador...' : '👴🏼 Ouvir Mensagem do Vovô'}</span>
+            </button>
+          </div>
         </div>
       </div>
 
