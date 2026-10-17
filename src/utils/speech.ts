@@ -33,7 +33,7 @@ function audioWithVersion(path: string): string {
 function getRawAudioPath(t: string): string | null {
   // 1. Demonstração / Teste Oficial (Áudio genuíno do Vovô Narrador)
   if (t.includes('caminhar com calma pelo vale') || t.includes('olá, guardião. vamos caminhar') || t.includes('ola, guardiao. vamos caminhar')) {
-    return '/audio/narration/teste-vovo-narrador.wav?v=2';
+    return '/audio/narration/teste-narrador.mp3';
   }
 
   // 2. Fases Principais
@@ -255,14 +255,11 @@ function getRawAudioPath(t: string): string | null {
   return null;
 }
 
-// Mapeamento de áudios de estúdio do Vovô Narrador (Voz Genuína pt-BR-AntonioNatural e teste-vovo-narrador.wav)
+// Mapeamento de áudios masculinos do Vovô Narrador, versionados para evitar cache antigo.
 export function findPreRecordedAudio(text: string): string | null {
   const t = text.toLowerCase();
   const rawPath = getRawAudioPath(t);
   if (!rawPath) return null;
-  if (rawPath.startsWith('/audio/narration/teste-vovo-narrador.wav')) {
-    return rawPath;
-  }
   return audioWithVersion(rawPath);
 }
 
