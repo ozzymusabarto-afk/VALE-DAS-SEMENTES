@@ -1,8 +1,9 @@
 import React from 'react';
-import { BookOpen, Volume2, VolumeX, Sparkles, Eye, Mic, Wind } from 'lucide-react';
+import { BookOpen, Volume2, VolumeX, Sparkles, Eye, Mic, Wind, Sliders } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 import { speechHelper } from '../utils/speech';
 import type { AccessibilitySettings } from '../types/game';
+import { VoiceSettingsModal } from './VoiceSettingsModal';
 
 interface HeaderProps {
   currentSeeds: number;
@@ -26,6 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isPlayingMusic, setIsPlayingMusic] = React.useState(false);
   const [isNarrating, setIsNarrating] = React.useState(false);
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = React.useState(false);
 
   const toggleMusic = () => {
     const active = soundManager.toggleMusic();
@@ -128,6 +130,16 @@ export const Header: React.FC<HeaderProps> = ({
         )}
 
         <button 
+          onClick={() => setIsVoiceModalOpen(true)}
+          className="btn-icon"
+          title="Configurações da Voz do Narrador"
+          aria-label="Configurar Voz do Narrador"
+        >
+          <Sliders size={18} aria-hidden="true" />
+          <span>Voz</span>
+        </button>
+
+        <button 
           onClick={toggleMusic}
           className={`btn-icon ${isPlayingMusic ? 'active' : ''}`}
           title="Música ambiente suave"
@@ -174,6 +186,11 @@ export const Header: React.FC<HeaderProps> = ({
           <span>{accessibility.reducedMotion ? 'Movimento: Calmo' : 'Movimento'}</span>
         </button>
       </nav>
+
+      <VoiceSettingsModal 
+        isOpen={isVoiceModalOpen} 
+        onClose={() => setIsVoiceModalOpen(false)} 
+      />
     </header>
   );
 };

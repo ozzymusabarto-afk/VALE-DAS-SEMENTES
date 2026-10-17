@@ -76,6 +76,11 @@ class MagicSoundManager {
     this.playBellNote(note * 1.5, now + 0.06, 0.35, 0.08);
   }
 
+  // Toque suave para botões e seleções
+  public playClick() {
+    this.playSeedDrop(2);
+  }
+
   // Brilho mágico de pólen e estrelas (Magic Sparkle)
   public playMagicSparkle() {
     if (this.isMuted) return;
