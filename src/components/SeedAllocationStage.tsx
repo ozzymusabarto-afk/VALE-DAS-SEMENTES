@@ -148,7 +148,7 @@ export const SeedAllocationStage: React.FC<SeedAllocationStageProps> = ({
                   className={`seed-token-item ${isUsed ? 'used' : ''} ${isSelected ? 'selected' : ''}`}
                   title={isUsed ? 'Semente já alocada em uma cesta' : 'Semente disponível (arraste ou clique)'}
                 >
-                  <span className="seed-graphic">🌰</span>
+                  <span className="seed-graphic" aria-hidden="true" />
                   <span className="seed-num">{idx + 1}</span>
                 </div>
               );
@@ -191,7 +191,7 @@ export const SeedAllocationStage: React.FC<SeedAllocationStageProps> = ({
             <div className="basket-interior-reservoir">
               <div className="basket-seeds-pile">
                 {Array.from({ length: allocation.now }).map((_, i) => (
-                  <span key={i} className="pile-seed" title="Semente no Agora">🌰</span>
+                  <span key={i} className="pile-seed" title="Semente no Agora" aria-label="Semente no Agora" />
                 ))}
                 {allocation.now === 0 && (
                   <span className="basket-empty-hint">Cesta vazia (toque para adicionar)</span>
@@ -258,7 +258,7 @@ export const SeedAllocationStage: React.FC<SeedAllocationStageProps> = ({
             <div className="basket-interior-reservoir">
               <div className="basket-seeds-pile">
                 {Array.from({ length: allocation.protection }).map((_, i) => (
-                  <span key={i} className="pile-seed protection-seed" title="Semente no Silo">🌰</span>
+                  <span key={i} className="pile-seed protection-seed" title="Semente no Silo" aria-label="Semente no Silo" />
                 ))}
                 {allocation.protection === 0 && (
                   <span className="basket-empty-hint">Silo vazio (toque para reservar)</span>
@@ -308,12 +308,12 @@ export const SeedAllocationStage: React.FC<SeedAllocationStageProps> = ({
 
           <div className="basket-visual-scene">
             <img 
-              src="/cena-ponte-primavera.webp" 
-              alt="A Ponte e a Natureza"
+              src="/cena-bosque-montanhas.webp" 
+              alt="Bosque e montanhas, representando planos de futuro"
               className="basket-mini-preview"
             />
             <div className="basket-wicker-weave">
-              <span className="basket-tagline">Projetos de longo prazo e a ponte</span>
+              <span className="basket-tagline">Projetos de longo prazo e pequenos passos</span>
             </div>
           </div>
 
@@ -325,7 +325,7 @@ export const SeedAllocationStage: React.FC<SeedAllocationStageProps> = ({
             <div className="basket-interior-reservoir">
               <div className="basket-seeds-pile">
                 {Array.from({ length: allocation.future }).map((_, i) => (
-                  <span key={i} className="pile-seed future-seed" title="Semente no Depois">🌰</span>
+                  <span key={i} className="pile-seed future-seed" title="Semente no Depois" aria-label="Semente no Depois" />
                 ))}
                 {allocation.future === 0 && (
                   <span className="basket-empty-hint">Cesta vazia (toque para planejar)</span>
