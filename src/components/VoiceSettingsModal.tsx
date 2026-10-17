@@ -138,10 +138,32 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({ isOpen, 
           </button>
         </div>
 
-        {/* Seletor de Vozes pt-BR */}
+        {/* Banner da Voz do Vovô Narrador */}
+        <div style={{
+          background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
+          border: '1.5px solid #86efac',
+          borderRadius: '14px',
+          padding: '12px 16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          marginBottom: '18px'
+        }}>
+          <div style={{ fontSize: '1.6rem' }} aria-hidden="true">👴🏼</div>
+          <div>
+            <strong style={{ display: 'block', color: '#166534', fontSize: '0.94rem' }}>
+              Voz de Vovô Amoroso (Estúdio pt-BR Ativa)
+            </strong>
+            <span style={{ fontSize: '0.82rem', color: '#334155' }}>
+              Tom firme, sereno e simpático gravado em estúdio com pausas naturais.
+            </span>
+          </div>
+        </div>
+
+        {/* Seletor de Vozes pt-BR (Fallback) */}
         <div style={{ marginBottom: '18px' }}>
           <label htmlFor="voice-select" style={{ display: 'block', fontWeight: 700, fontSize: '0.95rem', color: '#292524', marginBottom: '6px' }}>
-            Voz do Narrador em Português:
+            Voz do Navegador (Para leitura livre):
           </label>
 
           {voices.length > 0 ? (
@@ -177,7 +199,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({ isOpen, 
           )}
 
           <small style={{ display: 'block', color: '#78716c', marginTop: '6px', fontSize: '0.78rem' }}>
-            ℹ️ A lista exibe as vozes brasileiras disponíveis no seu navegador (ex: Microsoft Antonio Natural, Google pt-BR).
+            ℹ️ As falas e introduções principais tocam automaticamente a voz acolhedora de estúdio do Vovô Narrador.
           </small>
         </div>
 

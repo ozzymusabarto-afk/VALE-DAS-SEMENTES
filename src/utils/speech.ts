@@ -1,5 +1,5 @@
 // Narração Acolhedora em Português do Brasil — O Vale das Sementes
-// Configurado com tom maduro, calmo e acolhedor (estilo vovô amoroso)
+// Modo Híbrido: Voz de Estúdio do Vovô Narrador (pt-BR-AntonioNatural) + Fallback Inteligente Web Speech API
 
 export type SpeechPace = 'slow' | 'calm' | 'normal';
 
@@ -9,12 +9,79 @@ const PACE_RATES: Record<SpeechPace, number> = {
   normal: 0.96  // Ritmo normal de conversa
 };
 
-const TEST_SAMPLE_PHRASE = 
+const AUDIO_PLAYBACK_RATES: Record<SpeechPace, number> = {
+  slow: 0.88,
+  calm: 1.0,
+  normal: 1.15
+};
+
+export const TEST_SAMPLE_PHRASE = 
   "Olá, guardião. Vamos caminhar com calma pelo Vale. Cada semente que você cuida pode ajudar a construir uma escolha mais tranquila.";
 
 const STORAGE_KEY_VOICE = 'vale-das-sementes-voice';
 const STORAGE_KEY_PACE = 'vale-das-sementes-speech-pace';
 const STORAGE_KEY_MUTED = 'vale-das-sementes-speech-muted';
+
+// Mapeamento de áudios de estúdio do Vovô Narrador
+export function findPreRecordedAudio(text: string): string | null {
+  const t = text.toLowerCase();
+  
+  if (t.includes('caminhar com calma pelo vale') || t.includes('olá, guardião. vamos caminhar') || t.includes('ola, guardiao. vamos caminhar')) {
+    return '/audio/narration/teste-narrador.mp3';
+  }
+  if (t.includes('mapa do vale das sementes')) {
+    return '/audio/narration/map_overview.mp3';
+  }
+  if (t.includes('investigação no vale') || t.includes('investigacao no vale')) {
+    return '/audio/narration/location_scene.mp3';
+  }
+  if (t.includes('ponte de madeira e a festa das flores') && (t.includes('primavera') || t.includes('chegou ao vale') || t.includes('doze sementes') || t.includes('12 sementes'))) {
+    return '/audio/narration/narrative_card.mp3';
+  }
+  if (t.includes('hora da previsão') || t.includes('hora da previsao')) {
+    return '/audio/narration/prediction.mp3';
+  }
+  if (t.includes('distribua suas') || (t.includes('sementes entre agora') && t.includes('proteção no silo'))) {
+    return '/audio/narration/seed_allocation.mp3';
+  }
+  if (t.includes('ventania da virada de estação') || t.includes('ventania da virada de estacao')) {
+    return '/audio/narration/season_transition.mp3';
+  }
+  if (t.includes('compreendendo o resultado') || t.includes('vento soprou e soltou')) {
+    return '/audio/narration/consequence.mp3';
+  }
+  if (t.includes('excelente decisão') || t.includes('excelente decisao') || t.includes('comunidade permaneceu segura')) {
+    return '/audio/narration/consequence_protected.mp3';
+  }
+  if (t.includes('aprendizado valioso') || t.includes('reserva no silo faz falta')) {
+    return '/audio/narration/consequence_learning.mp3';
+  }
+  if (t.includes('diário de bordo') || t.includes('diario de bordo')) {
+    return '/audio/narration/introducao_diario.mp3';
+  }
+  if (t.includes('mercado da raposa') || t.includes('consumo consciente')) {
+    return '/audio/narration/loc_market.mp3';
+  }
+  if (t.includes('oficina de tomás') || t.includes('oficina de tomas') || t.includes('manutenção preventiva')) {
+    return '/audio/narration/loc_workshop.mp3';
+  }
+  if (t.includes('casa da fazenda') || t.includes('alimento em família')) {
+    return '/audio/narration/loc_house.mp3';
+  }
+  if (t.includes('silo da reserva') || t.includes('reserva de proteção')) {
+    return '/audio/narration/loc_silo.mp3';
+  }
+  if (t.includes('horta de cornélio') || t.includes('horta de cornelio') || t.includes('paciência do tempo')) {
+    return '/audio/narration/loc_field.mp3';
+  }
+  if (t.includes('bosque das montanhas') || t.includes('sonhos de longo prazo')) {
+    return '/audio/narration/loc_woods.mp3';
+  }
+  if (t.includes('ponte de madeira') || t.includes('cooperação comunitária')) {
+    return '/audio/narration/loc_bridge.mp3';
+  }
+  return null;
+}
 
 export function scoreVoice(voice: SpeechSynthesisVoice): number {
   const name = voice.name.toLowerCase();
@@ -52,6 +119,7 @@ export function scoreVoice(voice: SpeechSynthesisVoice): number {
 
 class SpeechHelper {
   private isSpeaking: boolean = false;
+  private currentAudio: HTMLAudioElement | null = null;
   private currentUtterance: SpeechSynthesisUtterance | null = null;
   private voices: SpeechSynthesisVoice[] = [];
   private selectedVoiceURI: string | null = null;
@@ -158,6 +226,9 @@ class SpeechHelper {
     } catch {
       // Silencioso
     }
+    if (this.currentAudio) {
+      this.currentAudio.playbackRate = AUDIO_PLAYBACK_RATES[this.pace] || 1.0;
+    }
     this.notifyListeners();
   }
 
@@ -179,11 +250,6 @@ class SpeechHelper {
   }
 
   public speak(text: string, onEnd?: () => void) {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-      if (onEnd) onEnd();
-      return;
-    }
-
     if (this.muted) {
       if (onEnd) onEnd();
       return;
@@ -192,7 +258,7 @@ class SpeechHelper {
     // Cancela qualquer fala anterior imediatamente antes de iniciar nova
     this.stop();
 
-    // Limpeza de marcações markdown e ajustes de pontuação para pausas naturais
+    // Limpeza de marcações markdown e ajustes de pontuação
     const cleanText = text
       .replace(/[*#_`]/g, '')
       .replace(/\s+/g, ' ')
@@ -203,17 +269,53 @@ class SpeechHelper {
       return;
     }
 
+    // 1. Tentar áudio pré-gravado com voz de estúdio do Vovô Narrador (Antonio Natural)
+    const audioUrl = findPreRecordedAudio(cleanText);
+    if (audioUrl && typeof window !== 'undefined') {
+      try {
+        const audio = new Audio(audioUrl);
+        audio.playbackRate = AUDIO_PLAYBACK_RATES[this.pace] || 1.0;
+        audio.volume = 1.0;
+        this.currentAudio = audio;
+        this.isSpeaking = true;
+
+        audio.onended = () => {
+          this.isSpeaking = false;
+          this.currentAudio = null;
+          if (onEnd) onEnd();
+        };
+
+        audio.onerror = () => {
+          this.currentAudio = null;
+          this.speakWithSynthesis(cleanText, onEnd);
+        };
+
+        audio.play().catch(() => {
+          this.currentAudio = null;
+          this.speakWithSynthesis(cleanText, onEnd);
+        });
+        return;
+      } catch {
+        this.currentAudio = null;
+      }
+    }
+
+    // 2. Fallback para síntese local caso não haja áudio gravado
+    this.speakWithSynthesis(cleanText, onEnd);
+  }
+
+  private speakWithSynthesis(cleanText: string, onEnd?: () => void) {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      if (onEnd) onEnd();
+      return;
+    }
+
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'pt-BR';
-    
-    // Ritmo sereno e pausado
     utterance.rate = PACE_RATES[this.pace] || 0.84;
-
-    // Tom acolhedor e maduro (vovô ensinando com paciência)
     utterance.pitch = 0.84;
     utterance.volume = 0.95;
 
-    // Seleciona a melhor voz disponível
     const bestVoice = this.getSelectedVoice();
     if (bestVoice) {
       utterance.voice = bestVoice;
@@ -226,7 +328,6 @@ class SpeechHelper {
     };
 
     utterance.onerror = (e) => {
-      // Se foi cancelamento intencional, não loga erro
       if (e.error !== 'canceled' && e.error !== 'interrupted') {
         console.warn('Síntese de fala interrompida:', e.error);
       }
@@ -242,6 +343,12 @@ class SpeechHelper {
   }
 
   public stop() {
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio.currentTime = 0;
+      this.currentAudio = null;
+    }
+
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
